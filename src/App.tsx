@@ -1,12 +1,57 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
+import AuthLayout from "./modules/shared/components/AuthLayout/AuthLayout";
+import NotFound from "./modules/shared/components/NotFound/NotFound";
+import Login from "./modules/Auth/components/Login/Login";
+import Register from "./modules/Auth/components/Register/Register";
+import ForgetPassword from "./modules/Auth/components/ForgetPassword/ForgetPassword";
+import ResetPassword from "./modules/Auth/components/ResetPassword/ResetPassword";
+import VerifyAccount from "./modules/Auth/components/VerifyAccount/VerifyAccount";
+import MasterLayout from "./modules/shared/components/MasterLayout/MasterLayout";
+import Home from "./modules/Home/components/Home/Home";
+import Projects from "./modules/Projects/components/Projects";
+import ProjectsData from "./modules/Projects/components/ProjectsData";
+import Tasks from "./modules/Tasks/components/Tasks/Tasks";
+import Users from "./modules/Users/components/Users/Users";
+import ChangePassword from "./modules/Auth/components/ChangePassword/ChangePassword";
+import Profile from "./modules/Profile/components/Profile";
 
 function App() {
+  const routes = createBrowserRouter([
+    {
+      path: "",
+      element: <AuthLayout />,
+      errorElement: <NotFound />,
+      children: [
+        { path: "", element: <Login /> },
+        { path: "login", element: <Login /> },
+        { path: "register", element: <Register /> },
+        { path: "forget-password", element: <ForgetPassword /> },
+        { path: "reset-password", element: <ResetPassword /> },
+        { path: "verify-account", element: <VerifyAccount /> },
+      ],
+    },
+    {
+      path: "dashboard",
+      element: <MasterLayout />,
+      errorElement: <NotFound />,
+      children: [
+        { path: "", element: <Home /> },
+        { path: "projects", element: <Projects /> },
+        { path: "project-data", element: <ProjectsData /> },
+        { path: "tasks", element: <Tasks /> },
+        { path: "users", element: <Users /> },
+        {
+          path: "change-password",
+          element: <ChangePassword />,
+        },
+        { path: "profile", element: <Profile /> },
+      ],
+    },
+  ]);
   return (
     <>
-      <h1 className="bg-amber-500  ">Hello World</h1>
-      <div className="bg-green-500 text-white p-4 text-2xl">
-        Tailwind is now working!
-      </div>
+      <RouterProvider router={routes}></RouterProvider>
     </>
   );
 }
