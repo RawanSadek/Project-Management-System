@@ -1,0 +1,15 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.authContainer {
+    background-image: url('assets/Images/auth-bg.svg');
+    background-size: cover;
+    background-position: center center;
+}
+
+.form-container{
+    background-color: rgba(49, 89, 81, 0.9);
+}
