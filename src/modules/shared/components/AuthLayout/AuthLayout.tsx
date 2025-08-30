@@ -14,7 +14,7 @@ const AuthLayout = () => {
             <div className="logo flex justify-center">
               <img src={logo} alt="logo" className={`w-70`} />
             </div>
-            <div className="form-container rounded-md !mt-4.5 !px-[10%] !py-[7%]">
+            <div className="form-container rounded-2xl !mt-4.5 !px-[12%] !pt-[14%] !pb-[5%]">
             <Outlet />
             </div>
           </div>
