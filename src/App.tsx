@@ -29,6 +29,7 @@ function App() {
         { path: "forget-password", element: <ForgetPassword /> },
         { path: "reset-password", element: <ResetPassword /> },
         { path: "verify-account", element: <VerifyAccount /> },
+        { path: "change-password", element: <ChangePassword />},
       ],
     },
     {
@@ -41,10 +42,6 @@ function App() {
         { path: "project-data", element: <ProjectsData /> },
         { path: "tasks", element: <Tasks /> },
         { path: "users", element: <Users /> },
-        {
-          path: "change-password",
-          element: <ChangePassword />,
-        },
         { path: "profile", element: <Profile /> },
       ],
     },

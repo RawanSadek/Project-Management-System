@@ -15,3 +15,9 @@ export interface AuthContextType {
 export interface AuthProviderProps {
   children: ReactNode;
 };
+
+export interface changePassDataTypes{
+    oldPassword: string,
+    newPassword: string,
+    confirmNewPassword: string
+}
