@@ -5,13 +5,13 @@ import { toast } from "react-toastify";
 import { useContext, useState } from "react";
 import { REQUIRED_VALIDATION } from "../../../../util/validations";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import axios from "axios";
 import loading from '../../../../assets/Images/loading.gif';
 import { AuthContext } from "../../../../Contexts/AuthContext/AuthContext";
+import { axiosInstance, USERS_URLS } from "../../../../util/axios";
 
 export default function Login() {
 
-  let {getLoginData} = useContext(AuthContext);
+  let { getLoginData } = useContext(AuthContext);
 
   let navigate = useNavigate();
 
@@ -19,7 +19,7 @@ export default function Login() {
 
   let onSubmit = async (data: loginDataTypes) => {
     try {
-      let response = await axios.post('https://upskilling-egypt.com:3003/api/v1/Users/Login', data);
+      let response = await axiosInstance.post(USERS_URLS.LOGIN, data);
       console.log(response)
       localStorage.setItem('token', response.data.token);
       getLoginData();
@@ -28,7 +28,6 @@ export default function Login() {
 
     } catch (error) {
       toast.error('Wrong Email or Password!')
-      // console.log(error)
     }
   }
 
@@ -44,9 +43,9 @@ export default function Login() {
 
         <label className="input-label !mt-6">Password</label>
         <div className="pass-input flex justify-between items-center border-b border-b-white">
-          <input {...register('password', REQUIRED_VALIDATION('Password'))} className="!w-[90%] !border-b-0" type={showPass?'text':'password'} placeholder="Enter you password" />
+          <input {...register('password', REQUIRED_VALIDATION('Password'))} className="!w-[90%] !border-b-0" type={showPass ? 'text' : 'password'} placeholder="Enter you password" />
           <div className="pss-toggle">
-            <button onMouseDown={(e) => e.preventDefault()} onMouseUp={(e) => e.preventDefault()} onClick={() => setShowPass(!showPass)} type='button' className="input-group-text py-2 border-0 rounded-start-0" id="basic-addon1">{showPass ? <FaRegEyeSlash className="cursor-pointer text-lg text-white"/> : <FaRegEye className="cursor-pointer text-lg text-white"/>}</button>
+            <button onMouseDown={(e) => e.preventDefault()} onMouseUp={(e) => e.preventDefault()} onClick={() => setShowPass(!showPass)} type='button' className="input-group-text py-2 border-0 rounded-start-0" id="basic-addon1">{showPass ? <FaRegEyeSlash className="cursor-pointer text-lg text-white" /> : <FaRegEye className="cursor-pointer text-lg text-white" />}</button>
           </div>
           {/* <FaRegEye onClick={!showPass} className="cursor-pointer text-lg text-white"/> */}
         </div>
