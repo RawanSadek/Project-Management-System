@@ -15,6 +15,7 @@ import Tasks from "./modules/Tasks/components/Tasks/Tasks";
 import Users from "./modules/Users/components/Users/Users";
 import ChangePassword from "./modules/Auth/components/ChangePassword/ChangePassword";
 import Profile from "./modules/Profile/components/Profile";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const routes = createBrowserRouter([
@@ -48,6 +49,7 @@ function App() {
   ]);
   return (
     <>
+    <ToastContainer/>
       <RouterProvider router={routes}></RouterProvider>
     </>
   );

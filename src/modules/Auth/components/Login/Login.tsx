@@ -23,7 +23,7 @@ export default function Login() {
       console.log(response)
       localStorage.setItem('token', response.data.token);
       getLoginData();
-      toast.success(`Welcome to the Food App!`);
+      toast.success(`Welcome to PMS!`);
       navigate('/dashboard');
 
     } catch (error) {
