@@ -21,3 +21,14 @@ export interface changePassDataTypes{
     newPassword: string,
     confirmNewPassword: string
 }
+export interface forgetPassDataTypes{
+    email: string,
+}
+
+
+export interface resetPassDataTypes{
+    email: string,
+  password: string,
+  confirmPassword: string,
+  seed: string
+}

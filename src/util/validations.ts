@@ -25,7 +25,9 @@ export const PHONE_VALIDATION = {
         message: "Invalid phone number!!"
     }
 }
-
+export const OTP_VALIDATION = {
+  required: "OTP is required!",
+};
 export const CONFIRM_PASSWORD_VALIDATION = (password:string)=>({
     required: 'Please confirm your password', 
     validate: (value:string) => value === password || 'Passwords must match' 
