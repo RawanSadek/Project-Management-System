@@ -1,6 +1,3 @@
-import type { JwtPayload } from "jwt-decode";
-import type { ReactNode } from "react";
-
 export interface loginDataTypes{
     email: string,
     password: string
@@ -31,4 +28,5 @@ export interface resetPassDataTypes{
   password: string,
   confirmPassword: string,
   seed: string
+
 }
