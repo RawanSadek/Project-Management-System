@@ -51,16 +51,15 @@
     font-size: 14px;
 }
 
-.auth-form input{
+input{
     width: 100%;
     border: none;
     border-bottom: 1px solid white;
     padding: 4px 0 10px 0;
     color: white;
-    background-color: transparent;
 }
 
-.auth-form input:focus{
+input:focus{
     outline: none;
 }
 
@@ -76,16 +75,4 @@
 .form-btn:hover{
     background-color: rgba(239, 155, 40, 0.8);
     cursor: pointer;
-}
-
-.form-btn:disabled {
-  background-color: rgba(239, 155, 40, 0.6);
-  cursor: default;
-}
-
-.auth-form input:-webkit-autofill,
-.auth-form input:-webkit-autofill:focus,
-.auth-form input:-webkit-autofill:hover {
-  -webkit-box-shadow: 0 0 0px 1000px #24534a inset;
-  -webkit-text-fill-color: white;
 }
