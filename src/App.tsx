@@ -15,6 +15,7 @@ import Tasks from "./modules/Tasks/components/Tasks/Tasks";
 import Users from "./modules/Users/components/Users/Users";
 import ChangePassword from "./modules/Auth/components/ChangePassword/ChangePassword";
 import Profile from "./modules/Profile/components/Profile";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const routes = createBrowserRouter([
@@ -29,6 +30,7 @@ function App() {
         { path: "forget-password", element: <ForgetPassword /> },
         { path: "reset-password", element: <ResetPassword /> },
         { path: "verify-account", element: <VerifyAccount /> },
+        { path: "change-password", element: <ChangePassword />},
       ],
     },
     {
@@ -41,16 +43,13 @@ function App() {
         { path: "project-data", element: <ProjectsData /> },
         { path: "tasks", element: <Tasks /> },
         { path: "users", element: <Users /> },
-        {
-          path: "change-password",
-          element: <ChangePassword />,
-        },
         { path: "profile", element: <Profile /> },
       ],
     },
   ]);
   return (
     <>
+    <ToastContainer/>
       <RouterProvider router={routes}></RouterProvider>
     </>
   );
