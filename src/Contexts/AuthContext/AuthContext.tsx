@@ -10,29 +10,31 @@ export let AuthContext = createContext<AuthContextType>({
 });
 
 export function AuthContextProvider({ children }: AuthProviderProps) {
-
-  let [loginData, setLoginData] = useState(() => {
+  const [loginData, setLoginData] = useState(() => {
     const token = localStorage.getItem("token");
     return token ? jwtDecode(token) : null;
   });
 
   let getLoginData = () => {
-    let encodedData = localStorage.getItem('token');
+    let encodedData = localStorage.getItem("token");
     if (!encodedData) return;
     let decodedData = jwtDecode(encodedData);
     setLoginData(decodedData);
-  }
+  };
 
   useEffect(() => {
-    if (localStorage.getItem('token'))
-      getLoginData();
-  }, [])
+    if (localStorage.getItem("token")) getLoginData();
+  }, []);
 
   const logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     setLoginData(null);
-    <Navigate to='/login' />
-  }
+    <Navigate to="/login" />;
+  };
 
-  return <AuthContext.Provider value={{ loginData, getLoginData, logout }}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={{ loginData, getLoginData, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
