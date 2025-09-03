@@ -26,10 +26,12 @@ export default function Login() {
       console.log(response);
       localStorage.setItem("token", response.data.token);
       getLoginData();
-      toast.success(`Welcome to PMS!`);
+      toast.success(response.data.message || "Welcome to PMS!");
+
       navigate("/dashboard");
-    } catch (error) {
-      toast.error("Wrong Email or Password!");
+    } catch  (error: any){
+         toast.error( error?.response?.data?.message || "Please insert correct data");
+
     }
   };
 

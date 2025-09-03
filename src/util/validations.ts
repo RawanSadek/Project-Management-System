@@ -33,8 +33,5 @@ export const CONFIRM_PASSWORD_VALIDATION = (password: string) => ({
 });
 export const OTP_VALIDATION = {
   required: "OTP is required!",
-  pattern: {
-    value: /^[0-9]{6}$/,
-    message: "Invalid OTP!",
-  },
+  
 };

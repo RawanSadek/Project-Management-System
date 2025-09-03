@@ -32,19 +32,19 @@ const ResetPassword = () => {
 
   const onSubmit = async (data: resetPassDataTypes) => {
     try {
+   
       const response = await axiosInstance.post(
         USERS_URLS.RESET_PASSWORD,
         data
       );
+      
       console.log(response);
       localStorage.setItem("token", response.data.token);
       getLoginData();
       toast.success(response.data.message || "Password Reset Successfully!");
       navigate("/login");
     } catch (error: any) {
-      toast.error(
-        error?.response?.data?.message || "Please insert correct data"
-      );
+      toast.error( error?.response?.data?.message || "Please insert correct data");
     }
   };
 
@@ -72,7 +72,7 @@ const ResetPassword = () => {
         <label className="input-label">E-mail</label>
         <input
           {...register("email")}
-          disabled={true}
+          readOnly             
           type="text"
           placeholder="Enter you E-mail"
           aria-label="email"
