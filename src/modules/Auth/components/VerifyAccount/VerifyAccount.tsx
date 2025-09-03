@@ -33,10 +33,9 @@ const VerifyAccount = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="w-full max-w-md rounded-2xl  mx-auto p-6 sm:p-10 relative flex flex-col gap-7 auth-form"
+      className="w-full max-w-md rounded-2xl  mx-auto p-6 sm:p-10 relative flex flex-col gap-7 auth-form "
     >
-      <div className="text-white text-sm">welcome to PMS</div>
-      <h2 className="text-2xl sm:text-3xl font-bold text-[#FFA726] mb-6 sm:mb-8 self-start ">
+      <h2 className="text-2xl sm:text-3xl font-bold text-[#FFA726] mb-6 sm:mb-8 self-start form-title ">
         Verify Account
       </h2>
       <div className="w-full mb-4 sm:mb-6">

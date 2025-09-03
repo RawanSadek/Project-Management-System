@@ -37,11 +37,7 @@ const Register = () => {
       onSubmit={handleSubmit(onSubmit)}
       className=" rounded-2xl  flex flex-col auth-form"
     >
-      <div className=" text-white text-sm text-start">
-        {" "}
-        <p>welcome to PMS</p>
-      </div>
-      <h2 className="text-3xl font-bold text-[#FFA726] mb-2 self-start ">
+      <h2 className="text-3xl font-bold text-[#FFA726] mb-2 self-start form-title">
         Create New Account
       </h2>
       <div className="flex justify-center w-full mb-6">
