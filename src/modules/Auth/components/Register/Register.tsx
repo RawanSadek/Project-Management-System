@@ -41,11 +41,11 @@ const Register = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className=" rounded-2xl  flex flex-col auth-form"
-    >
-      <h2 className="text-3xl font-bold text-[#FFA726] mb-2 self-start form-title">
+      className=" rounded-2xl  flex flex-col auth-form" >
+      {/* <h2 className="text-3xl font-bold text-[#FFA726] mb-2 self-start form-title">
         Create New Account
-      </h2>
+      </h2>  */}
+        <h2 className="form-title"> Create New Account</h2> 
       <div className="flex justify-center  mb-6">
         <div className="relative">
           <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">

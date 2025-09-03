@@ -35,9 +35,11 @@ const VerifyAccount = () => {
       onSubmit={handleSubmit(onSubmit)}
       className="w-full max-w-md rounded-2xl  mx-auto p-6 sm:p-10 relative flex flex-col gap-7 auth-form "
     >
-      <h2 className="text-2xl sm:text-3xl font-bold text-[#FFA726] mb-6 sm:mb-8 self-start form-title ">
+      {/* <h2 className="text-2xl sm:text-3xl font-bold text-[#FFA726] mb-6 sm:mb-8 self-start form-title ">
         Verify Account
-      </h2>
+      </h2> */}
+        <h2 className="form-title"> Verify Account</h2> 
+
       <div className="w-full mb-4 sm:mb-6">
         <label className="text-[#FFA726] text-sm">E-mail</label>
         <input
