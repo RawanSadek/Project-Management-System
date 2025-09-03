@@ -5,7 +5,12 @@ import { axiosInstance, USERS_URLS } from "../../../../util/axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import loading from "../../../../assets/Images/loading.gif";
-import { REQUIRED_VALIDATION } from "./../../../../util/validations";
+import {
+  CONFIRM_PASSWORD_VALIDATION,
+  EMAIL_VALIDATION,
+  PASSWORD_VALIDATION,
+  PHONE_VALIDATION,
+} from "./../../../../util/validations";
 import type { RegisterTypes } from "../../../../types/types";
 
 const Register = () => {
@@ -13,6 +18,7 @@ const Register = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<RegisterTypes>();
   const [showPass, setShowPass] = useState(false);
@@ -40,7 +46,7 @@ const Register = () => {
       <h2 className="text-3xl font-bold text-[#FFA726] mb-2 self-start form-title">
         Create New Account
       </h2>
-      <div className="flex justify-center w-full mb-6">
+      <div className="flex justify-center  mb-6">
         <div className="relative">
           <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
             <img
@@ -82,7 +88,7 @@ const Register = () => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-x-10 gap-y-6 w-full px-10">
+      <div className="grid grid-cols-2 gap-x-10 gap-y-6  px-10">
         <div>
           <label className="text-[#FFA726] text-sm">User Name</label>
           <input
@@ -96,7 +102,7 @@ const Register = () => {
             })}
             type="text"
             placeholder="Enter your name"
-            className="w-full bg-transparent border-b border-gray-300 text-white py-2 focus:outline-none"
+            className=" bg-transparent border-b border-gray-300 text-white py-2 focus:outline-none"
           />
           {errors.userName && (
             <span className="text-red-700 text-xs">
@@ -107,10 +113,10 @@ const Register = () => {
         <div>
           <label className="text-[#FFA726] text-sm">E-mail</label>
           <input
-            {...register("email", REQUIRED_VALIDATION("Email"))}
+            {...register("email", EMAIL_VALIDATION)}
             type="email"
             placeholder="Enter your E-mail"
-            className="w-full bg-transparent border-b border-gray-300 text-white py-2 focus:outline-none"
+            className=" bg-transparent border-b border-gray-300 text-white py-2 focus:outline-none"
           />
           {errors.email && (
             <span className="text-red-700 text-xs">
@@ -124,7 +130,7 @@ const Register = () => {
             {...register("country", { required: "Country is required" })}
             type="text"
             placeholder="Enter your country"
-            className="w-full bg-transparent border-b border-gray-300 text-white py-2 focus:outline-none"
+            className=" bg-transparent border-b border-gray-300 text-white py-2 focus:outline-none"
           />
           {errors.country && (
             <span className="text-red-700 text-xs">
@@ -135,12 +141,10 @@ const Register = () => {
         <div>
           <label className="text-[#FFA726] text-sm">Phone Number</label>
           <input
-            {...register("phoneNumber", {
-              required: "Phone number is required",
-            })}
+            {...register("phoneNumber", PHONE_VALIDATION)}
             type="text"
             placeholder="Enter your phone number"
-            className="w-full bg-transparent border-b border-gray-300 text-white py-2 focus:outline-none"
+            className=" bg-transparent border-b border-gray-300 text-white py-2 focus:outline-none"
           />
           {errors.phoneNumber && (
             <span className="text-red-700 text-xs">
@@ -152,10 +156,10 @@ const Register = () => {
           <label className="text-[#FFA726] text-sm">Password</label>
           <div className="flex items-center border-b border-gray-300">
             <input
-              {...register("password", { required: "Password is required" })}
+              {...register("password", PASSWORD_VALIDATION)}
               type={showPass ? "text" : "password"}
               placeholder="Enter your Password"
-              className="w-full bg-transparent text-white py-2 focus:outline-none border-0"
+              className="bg-transparent text-white py-2 focus:outline-none border-0"
             />
             <button type="button" onClick={() => setShowPass(!showPass)}>
               {showPass ? (
@@ -175,12 +179,13 @@ const Register = () => {
           <label className="text-[#FFA726] text-sm">Confirm Password</label>
           <div className="flex items-center border-b border-gray-300">
             <input
-              {...register("confirmPassword", {
-                required: "Confirm password is required",
-              })}
+              {...register(
+                "confirmPassword",
+                CONFIRM_PASSWORD_VALIDATION(watch("password"))
+              )}
               type={showConfirmPass ? "text" : "password"}
               placeholder="Confirm New Password"
-              className="w-full bg-transparent text-white py-2 focus:outline-none border-0"
+              className=" bg-transparent text-white py-2 focus:outline-none border-0"
             />
             <button
               type="button"
