@@ -5,15 +5,14 @@ import SideBar from "../SidetBar/SideBar";
 const MasterLayout = () => {
   return (
     <>
-      <div className="flex  ">
-        <div className="w-1/4">
-          <SideBar />
+      <div className="flex flex-col w-screen min-h-screen">
+        <div className="h-1/12 shadow-lg">
+          <Navbar />
         </div>
-        <div className="w-3/4 p-3 ">
-          <div className="mb-3">
-            <Navbar />
+        <div className="flex flex-1 bg-[#F5F5F5]">
+          <div className="w-1/5">
+            <SideBar />
           </div>
-
           <Outlet />
         </div>
       </div>

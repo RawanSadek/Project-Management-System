@@ -1,4 +1,3 @@
-import type { JwtPayload } from "jwt-decode";
 import type { ReactNode } from "react";
 
 export interface loginDataTypes {
@@ -7,7 +6,7 @@ export interface loginDataTypes {
 }
 
 export interface AuthContextType {
-  loginData: JwtPayload | null;
+  loginData: loginDataTypes | null;
   getLoginData: () => void;
   logout: () => void;
 }
@@ -42,4 +41,15 @@ export interface resetPassDataTypes {
 }
 export interface forgetPassDataTypes {
   email: string;
+}
+
+export interface loginDataTypes {
+  exp: number;
+  iat: number;
+  roles: string[];
+  userEmail: string;
+  userGroup: string;
+  userId: number;
+  userName: string;
+  profilePicture?: string;
 }
