@@ -26,4 +26,24 @@ export const USERS_URLS = {
   RESET_PASSWORD: `/Users/Reset`,
   VERIFYACCOUNT: `/Users/verify`,
   CHANGEPASSWORD: `/Users/ChangePassword`,
+  GETUSERS: `/Users` ,
+  TOGGLE_USER: (id: number) => `/Users/${id}`,
+  GET_USER_DETAILS : (id: number) => `/Project/${id}` ,
+
+};
+// PROJECTS_URLS 
+export const PROJECTS_URLS = {
+  GET_ALL_PROJECTS : `/Project`,
+  CREATE_PROJECTS: `/Project`,
+  DELETE_PROJECTS : (id: number) => `/Project/${id}` ,
+  EDIT_PROJECTS_BY_MANGER : (id: number) => `/Project/${id}` ,
+  GET_PROJECT_DETAILS : (id: number) => `/Project/${id}` ,
+};
+export const TASKS_URLS = {
+  GET_PROJECT_TASKS: `Task/project` ,
+  GET_TASKS_COUNT: `/Task/count`, 
+  CREATE_PROJECTS: `/Task` ,
+  DELETE_TASKS: (id: number) => `/Task/${id}` ,
+  EDIT_PROJECTS_BY_MANGER : (id: number) => `/Task/${id}` ,
+  GET_TASKS_DETAILS : (id: number) => `/Task/${id}` ,
 };
