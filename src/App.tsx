@@ -16,6 +16,7 @@ import Users from "./modules/Users/components/Users/Users";
 import ChangePassword from "./modules/Auth/components/ChangePassword/ChangePassword";
 import Profile from "./modules/Profile/components/Profile";
 import { ToastContainer } from "react-toastify";
+import { AuthContextProvider } from "./Contexts/AuthContext/AuthContext";
 
 function App() {
   const routes = createBrowserRouter([
@@ -50,7 +51,9 @@ function App() {
   return (
     <>
     <ToastContainer/>
+    <AuthContextProvider>
       <RouterProvider router={routes}></RouterProvider>
+    </AuthContextProvider>
     </>
   );
 }
