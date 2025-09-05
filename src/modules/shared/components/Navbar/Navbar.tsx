@@ -44,8 +44,12 @@ export default function Navbar() {
             {/* drop down list */}
             {profileOpen &&
               <div className="absolute right-0 top-16 w-48 origin-top-right bg-white !p-3 shadow-lg border-1 border-gray-100 ring-opacity-5 z-50  rounded-md">
-                <Link to='/dashboard/profile' className="block px-4 !p-1 text-sm hover:bg-[#EF9B284D] rounded-md">Profile</Link>
-                <Link onClick={logout} to='/login' className="block px-4 !p-1 text-sm hover:bg-[#EF9B284D] rounded-md">Sign out</Link>
+                <Link to='/dashboard/profile' className="w-full flex items-center gap-2 !px-4 !py-2 text-sm hover:bg-[#EF9B284D] rounded-md">
+                  <RiProfileFill className="text-[#EF9B28] text-lg" />Profile
+                </Link>
+                <Link onClick={logout} to='/login' className="w-full flex items-center gap-2 !px-4 !py-2 text-sm hover:bg-[#EF9B284D] rounded-md">
+                  <TbLogout2 className="text-[#EF9B28] text-lg" />Sign out
+                </Link>
               </div>
             }
           </div>
