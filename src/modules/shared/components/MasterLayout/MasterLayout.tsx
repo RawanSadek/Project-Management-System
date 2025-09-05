@@ -6,11 +6,11 @@ const MasterLayout = () => {
   return (
     <>
       <div className="flex flex-col w-screen min-h-screen">
-        <div className="h-1/12 shadow-lg">
+        <div className="shadow-lg">
           <Navbar />
         </div>
         <div className="flex flex-1 bg-[#F5F5F5]">
-          <div className="w-1/5">
+          <div>
             <SideBar />
           </div>
           <Outlet />
