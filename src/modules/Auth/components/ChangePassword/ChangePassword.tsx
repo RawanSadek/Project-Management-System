@@ -40,8 +40,9 @@ export default function ChangePassword() {
   const [showConfirmPass, setShowConfirmPass] = useState(false);
 
   useEffect(() => {
-    if (watch("confirmNewPassword")) trigger("confirmNewPassword");
-  }, [watch("oldPassword")]);
+    if (watch("confirmNewPassword"))
+      trigger("confirmNewPassword");
+  }, [watch("newPassword")]);
 
   return (
     <>
