@@ -39,8 +39,7 @@ const ResetPassword = () => {
       );
       
       console.log(response);
-      localStorage.setItem("token", response.data.token);
-      getLoginData();
+    
       toast.success(response.data.message || "Password Reset Successfully!");
       navigate("/login");
     } catch (error: any) {
@@ -51,12 +50,6 @@ const ResetPassword = () => {
   const [showPass, setShowPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
 
-  //  useEffect(() => {
-  //     if (watch('confirmPassword')){
-  //       trigger('confirmPassword');
-
-  //     }
-  //   }, [watch('password')])
   useEffect(() => {
     if (watch("confirmPassword")) {
       trigger("confirmPassword");
