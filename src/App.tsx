@@ -16,6 +16,8 @@ import Users from "./modules/Users/components/Users/Users";
 import ChangePassword from "./modules/Auth/components/ChangePassword/ChangePassword";
 import Profile from "./modules/Profile/components/Profile";
 import { ToastContainer } from "react-toastify";
+import { AuthContextProvider } from "./Contexts/AuthContext/AuthContext";
+import ProtectedRouted from "./modules/shared/components/ProtectedRouted/ProtectedRouted";
 
 function App() {
   const routes = createBrowserRouter([
@@ -30,12 +32,16 @@ function App() {
         { path: "forget-password", element: <ForgetPassword /> },
         { path: "reset-password", element: <ResetPassword /> },
         { path: "verify-account", element: <VerifyAccount /> },
-        { path: "change-password", element: <ChangePassword />},
+        { path: "change-password", element: <ChangePassword /> },
       ],
     },
     {
       path: "dashboard",
-      element: <MasterLayout />,
+      element: (
+        <ProtectedRouted>
+          <MasterLayout />
+        </ProtectedRouted>
+      ),
       errorElement: <NotFound />,
       children: [
         { path: "", element: <Home /> },
@@ -49,8 +55,10 @@ function App() {
   ]);
   return (
     <>
-    <ToastContainer/>
-      <RouterProvider router={routes}></RouterProvider>
+      <ToastContainer />
+      <AuthContextProvider>
+        <RouterProvider router={routes}></RouterProvider>
+      </AuthContextProvider>
     </>
   );
 }
