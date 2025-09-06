@@ -27,6 +27,7 @@ export const USERS_URLS = {
   VERIFYACCOUNT: `/Users/verify`,
   CHANGEPASSWORD: `/Users/ChangePassword`,
   GETUSERS: `/Users` ,
+  GET_USERS_COUNT: `/Users/count` ,
   TOGGLE_USER: (id: number) => `/Users/${id}`,
   GET_USER_DETAILS : (id: number) => `/Project/${id}` ,
 
