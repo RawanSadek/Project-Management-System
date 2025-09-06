@@ -29,7 +29,7 @@ export default function Navbar() {
           <div className="hidden sm:flex items-center justify-between gap-5">
             <FaBell className="text-xl text-[#EF9B28]" />
 
-            <div onClick={() => setProfileOpen(!profileOpen)} className="flex justify-between items-center gap-2 border-s border-gray-400 !px-4 cursor-pointer">
+            <div className="flex justify-between items-center gap-2 border-s border-gray-400 !px-7 cursor-pointer">
               <img src={loginData?.profilePicture ? loginData?.profilePicture : noPP} alt="pp" className="size-8 rounded-full bg-gray-800 outline -outline-offset-1 outline-white/10" />
 
               <div className="flex justify-between items-center gap-5">
@@ -37,13 +37,14 @@ export default function Navbar() {
                   <h5>{loginData?.userName}</h5>
                   <small className="text-gray-400">{loginData?.userEmail}</small>
                 </div>
-                {profileOpen ? <IoIosArrowUp className="text-gray-400 text-xl" /> : <IoIosArrowDown className="text-gray-400 text-xl" />}
+
+                {profileOpen ? <IoIosArrowUp onClick={() => setProfileOpen(!profileOpen)} className="text-gray-400 text-xl" /> : <IoIosArrowDown onClick={() => setProfileOpen(!profileOpen)} className="text-gray-400 text-xl" />}
               </div>
             </div>
 
             {/* drop down list */}
             {profileOpen &&
-              <div className="absolute right-0 top-16 w-48 origin-top-right bg-white !p-3 shadow-lg border-1 border-gray-100 ring-opacity-5 z-50  rounded-md">
+              <div className="absolute right-0 top-[100%] w-48 origin-top-right bg-white !p-3 shadow-lg border-1 border-gray-100 ring-opacity-5 z-50  rounded-md">
                 <Link to='/dashboard/profile' className="w-full flex items-center gap-2 !px-4 !py-2 text-sm hover:bg-[#EF9B284D] rounded-md">
                   <RiProfileFill className="text-[#EF9B28] text-lg" />Profile
                 </Link>
@@ -71,7 +72,7 @@ export default function Navbar() {
                   <img src={loginData?.profilePicture ? loginData?.profilePicture : noPP} alt="pp" className="w-10 h-10 rounded-full" />
                   <div className="flex flex-col">
                     <h5 className="font-medium text-gray-900">{loginData?.userName}</h5>
-                    <small className="text-gray-500">{loginData?.userEmail}</small>
+                    <small className="text-gray-500 text-[10px]">{loginData?.userEmail}</small>
                   </div>
                 </div>
 

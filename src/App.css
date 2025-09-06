@@ -5,7 +5,7 @@
 }
 
 :root {
-  --signature-yellow: rgba(239, 155, 40);
+    --signature-yellow: rgba(239, 155, 40);
 }
 
 .authContainer {
@@ -45,13 +45,13 @@
     color: white;
 }
 
-.input-label{
+.input-label {
     display: block;
     color: var(--signature-yellow);
     font-size: 14px;
 }
 
-.auth-form input{
+.auth-form input {
     width: 100%;
     border: none;
     border-bottom: 1px solid white;
@@ -60,11 +60,11 @@
     background-color: transparent;
 }
 
-.auth-form input:focus{
+.auth-form input:focus {
     outline: none;
 }
 
-.form-btn{
+.form-btn {
     background-color: var(--signature-yellow);
     width: 95%;
     color: white;
@@ -73,39 +73,64 @@
     margin-top: 40px;
 }
 
-.form-btn:hover{
+.form-btn:hover {
     background-color: rgba(239, 155, 40, 0.8);
     cursor: pointer;
 }
 
 .form-btn:disabled {
-  background-color: rgba(239, 155, 40, 0.6);
-  cursor: default;
+    background-color: rgba(239, 155, 40, 0.6);
+    cursor: default;
 }
 
 .auth-form input:-webkit-autofill,
 .auth-form input:-webkit-autofill:focus,
 .auth-form input:-webkit-autofill:hover {
-  -webkit-box-shadow: 0 0 0px 1000px #24534a inset;
-  -webkit-text-fill-color: white;
+    -webkit-box-shadow: 0 0 0px 1000px #24534a inset;
+    -webkit-text-fill-color: white;
 }
 
-.ps-sidebar-container{
+.ps-sidebar-container {
     background-color: transparent !important;
 }
 
-.css-dip3t8{
+.css-dip3t8 {
     background-color: none !important;
-    /* margin-left: 20px !important; */
 }
 
 
-.ps-menu-button:hover{
+.ps-menu-button:hover {
     background-color: rgba(239, 155, 40, 0.3) !important;
     border-radius: 10px !important;
     color: rgba(239, 155, 40) !important;
 }
 
-/* .ps-sidebar-root{
-    max-width: fit-content !important;
-} */
+.ps-sidebar-root{
+    min-height: 100% !important;
+    height: 100vh !important;
+}
+
+.header {
+    background-image: url(assets/Images/header-bg.jpg);
+    background-size: 100% 230%;
+    background-position: 0 -150px;
+}
+
+@media (max-width: 768px) {
+    .header {
+        background-size: 100% 180%;
+        background-position: 0 -60px;
+        /* background-position: center; */
+    }
+}
+
+.header-overlay {
+    background-color: #31595170;
+    height: 100%;
+}
+
+html,body{
+    min-width: fit-content ;
+    min-height: fit-content;
+    overflow-x: hidden;
+}
