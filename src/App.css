@@ -92,6 +92,7 @@
 
 .ps-sidebar-container {
     background-color: transparent !important;
+    /* height: 100% !important; */
 }
 
 .css-dip3t8 {
@@ -107,19 +108,19 @@
 
 .ps-sidebar-root{
     min-height: 100% !important;
-    height: 100vh !important;
+    /* height: 100vh !important; */
 }
 
 .header {
     background-image: url(assets/Images/header-bg.jpg);
-    background-size: 100% 230%;
-    background-position: 0 -150px;
+    background-size: 100% 233%;
+    background-position: 0 -190px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1000px) {
     .header {
         background-size: 100% 180%;
-        background-position: 0 -60px;
+        background-position: 0 -60px; 
         /* background-position: center; */
     }
 }

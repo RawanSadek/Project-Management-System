@@ -9,17 +9,17 @@ import { MdBlock } from "react-icons/md";
 import { ImEye } from "react-icons/im";
 
 export default function Users() {
-  let [users, setUsers] = useState<UserTypes[]>([]);
-  let [loading, setLoading] = useState(false);
-  let [actionsOpen, setActionsOpen] = useState(false);
-  let [rowIdx, setRowIdx] = useState<number>();
+  const [users, setUsers] = useState<UserTypes[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [actionsOpen, setActionsOpen] = useState(false);
+  const [rowIdx, setRowIdx] = useState<number>();
 
-  let getUsers = async () => {
+  const getUsers = async () => {
     try {
       setLoading(true);
-      let response = await axiosInstance(USERS_URLS.GETUSERS);
+      const response = await axiosInstance(USERS_URLS.GETUSERS);
       setUsers(response.data.data);
-      console.log(response.data.data);
+      // console.log(response.data.data);
     } catch (error) {
       console.log(error);
     }

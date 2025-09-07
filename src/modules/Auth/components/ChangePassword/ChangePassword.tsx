@@ -11,6 +11,7 @@ import loading from "../../../../assets/Images/loading.gif";
 import { axiosInstance, USERS_URLS } from "../../../../util/axios";
 import { toast } from "react-toastify";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import type { AxiosError } from "axios";
 
 export default function ChangePassword() {
   const navigate = useNavigate();
@@ -28,10 +29,11 @@ export default function ChangePassword() {
   const onSubmit = async (data: changePassDataTypes) => {
     try {
       const response = await axiosInstance.put(USERS_URLS.CHANGEPASSWORD, data);
-      toast.success(response.data.message);
+      toast.success(response?.data?.message);
       navigate("/login");
-    } catch (error) {
-      toast.error(error?.response.data.message);
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -47,7 +49,9 @@ export default function ChangePassword() {
     <>
       <h2 className="form-title">Change Password</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="auth-form">
-        <label className="input-label !mt-6">Old Password</label>
+        <label htmlFor="oldPassword" className="input-label !mt-6">
+          Old Password
+        </label>
         <div className="pass-input flex justify-between items-center border-b border-b-white">
           <input
             {...register("oldPassword", REQUIRED_VALIDATION("Old Password"))}
@@ -78,7 +82,9 @@ export default function ChangePassword() {
           </span>
         )}
 
-        <label className="input-label !mt-6">New Password</label>
+        <label htmlFor="newPassword" className="input-label !mt-6">
+          New Password
+        </label>
         <div className="pass-input flex justify-between items-center border-b border-b-white">
           <input
             {...register("newPassword", PASSWORD_VALIDATION)}
@@ -109,7 +115,9 @@ export default function ChangePassword() {
           </span>
         )}
 
-        <label className="input-label !mt-6">Confirm New Password</label>
+        <label htmlFor="confirmNewPassword" className="input-label !mt-6">
+          Confirm New Password
+        </label>
         <div className="pass-input flex justify-between items-center border-b border-b-white">
           <input
             {...register(
