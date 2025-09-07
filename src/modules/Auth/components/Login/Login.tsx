@@ -8,6 +8,7 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import loading from "../../../../assets/Images/loading.gif";
 import { AuthContext } from "../../../../Contexts/AuthContext/AuthContext";
 import { axiosInstance, USERS_URLS } from "../../../../util/axios";
+import type { AxiosError } from "axios";
 
 export default function Login() {
   const { getLoginData } = useContext(AuthContext);
@@ -28,10 +29,9 @@ export default function Login() {
       toast.success(response.data.message || "Welcome to PMS!");
 
       navigate("/dashboard");
-    } catch (error: any) {
-      toast.error(
-        error?.response?.data?.message || "Please insert correct data"
-      );
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 

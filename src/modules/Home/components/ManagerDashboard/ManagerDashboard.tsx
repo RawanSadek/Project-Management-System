@@ -2,16 +2,17 @@ import { useEffect, useState } from "react";
 import { SlUserFollowing, SlUserUnfollow } from "react-icons/sl";
 import { axiosInstance, USERS_URLS } from "../../../../util/axios";
 import dataLoading from '../../../../assets/Images/dataLoading.gif'
+import type { UsersCountTypes } from "../../../../types/types";
 
 
 export default function ManagerDashboard() {
-  let [usersCount, setUsersCount] = useState<any>(null);
-  let [loading, setLoading] = useState(false);
+  const [usersCount, setUsersCount] = useState<UsersCountTypes>();
+  const [loading, setLoading] = useState(false);
 
-  let getUsersCount = async () => {
+  const getUsersCount = async () => {
     try {
       setLoading(true);
-      let response = await axiosInstance(USERS_URLS.GET_USERS_COUNT);
+      const response = await axiosInstance(USERS_URLS.GET_USERS_COUNT);
       setUsersCount(response.data);
     } catch (error) {
       console.log(error);

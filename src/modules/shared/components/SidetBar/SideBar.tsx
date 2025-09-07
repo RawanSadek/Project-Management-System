@@ -11,13 +11,13 @@ import { TbLogout2, TbUsers } from 'react-icons/tb';
 
 export default function SideBar() {
 
-  let { loginData, logout } = useContext(AuthContext);
+  const { loginData, logout } = useContext(AuthContext);
 
-  let [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
     <>
-      <Sidebar collapsed={collapsed} className='h-full bg-[#0E382F] !py-4'>
+      <Sidebar collapsed={collapsed} className='bg-[#0E382F] !py-4 '>
         <button onClick={()=>setCollapsed(!collapsed)} className='!ms-auto block cursor-pointer'>{!collapsed?<TfiAngleLeft className='text-white !ms-auto !mb-5 bg-[#EF9B28] h-8 rounded-l-lg'/>:<TfiAngleRight className='text-white !ms-auto !mb-5 bg-[#EF9B28] h-8 rounded-l-lg'/>}</button>
         <Menu className='w-[85%] !mx-auto' >
           <MenuItem component={<Link to="/dashboard" />} className='text-white'> <AiOutlineHome className='text-2xl inline !me-4 !mb-2' />Home</MenuItem>
