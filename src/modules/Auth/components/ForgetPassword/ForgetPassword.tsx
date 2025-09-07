@@ -26,9 +26,6 @@ const ForgetPassword = () => {
         USERS_URLS.FORGET_PASSWORD,
         data
       );
-      console.log(response);
-      localStorage.setItem("token", response.data.token);
-      getLoginData();
       toast.success(response.data.message || "Check Your E-mail!");
 
       navigate("/reset-password", { state: data.email });

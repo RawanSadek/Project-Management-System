@@ -26,14 +26,12 @@ const Register = () => {
   const [avatarPreview, setAvatarPreview] = useState<string | undefined>(
     undefined
   );
-
   const onSubmit = async (data: RegisterTypes) => {
     try {
       const response = await axiosInstance.post(USERS_URLS.REGISTER, data);
       toast.success(response.data.message);
       navigate("/verify-account", { state: { email: data.email } });
     } catch (error: any) {
-      console.log(error);
       toast.error(error?.response?.data?.message);
     }
   };
@@ -41,11 +39,9 @@ const Register = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className=" rounded-2xl  flex flex-col auth-form" >
-      {/* <h2 className="text-3xl font-bold text-[#FFA726] mb-2 self-start form-title">
-        Create New Account
-      </h2>  */}
-        <h2 className="form-title"> Create New Account</h2> 
+      className=" rounded-2xl  flex flex-col auth-form"
+    >
+      <h2 className="form-title"> Create New Account</h2>
       <div className="flex justify-center  mb-6">
         <div className="relative">
           <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
@@ -97,7 +93,11 @@ const Register = () => {
               pattern: {
                 value: /^[A-Za-z]+[0-9]+$/,
                 message:
-                  "Username must contain only letters followed by numbers without spaces",
+                  "Username must contain letters followed by numbers without spaces",
+              },
+              maxLength: {
+                value: 8,
+                message: "Username must not exceed 8 characters",
               },
             })}
             type="text"

@@ -23,15 +23,15 @@ export default function Login() {
   const onSubmit = async (data: loginDataTypes) => {
     try {
       const response = await axiosInstance.post(USERS_URLS.LOGIN, data);
-      console.log(response);
       localStorage.setItem("token", response.data.token);
       getLoginData();
       toast.success(response.data.message || "Welcome to PMS!");
 
       navigate("/dashboard");
-    } catch  (error: any){
-         toast.error( error?.response?.data?.message || "Please insert correct data");
-
+    } catch (error: any) {
+      toast.error(
+        error?.response?.data?.message || "Please insert correct data"
+      );
     }
   };
 
