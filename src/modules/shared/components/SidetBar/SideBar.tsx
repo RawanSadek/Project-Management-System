@@ -23,7 +23,7 @@ export default function SideBar() {
           <MenuItem component={<Link to="/dashboard" />} className='text-white'> <AiOutlineHome className='text-2xl inline !me-4 !mb-2' />Home</MenuItem>
           <MenuItem component={<Link to="/dashboard/projects" />} className='text-white'> <CiGrid42 className='text-2xl inline !me-4 !mb-1' />Projects</MenuItem>
           <MenuItem component={<Link to="/dashboard/tasks" />} className='text-white'> <BsListCheck className='text-2xl inline !me-4 !mb-1' />Tasks</MenuItem>
-          {loginData?.userGroup == 'Manager' && <MenuItem component={<Link to="/dashboard/tasks" />} className='text-white'> <TbUsers className='text-2xl inline !me-4 !mb-1' />Users</MenuItem>}
+          {loginData?.userGroup == 'Manager' && <MenuItem component={<Link to="/dashboard/users" />} className='text-white'> <TbUsers className='text-2xl inline !me-4 !mb-1' />Users</MenuItem>}
           <MenuItem component={<Link to="/change-password" />} className='text-white'> <RiLockPasswordLine className='text-2xl inline !me-4 !mb-1' />Change Password</MenuItem>
           <MenuItem component={<Link to="/login" />} onClick={logout} className='text-white'> <TbLogout2 className='text-2xl inline !me-4 !mb-1' />Logout</MenuItem>
         </Menu>

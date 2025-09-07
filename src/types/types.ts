@@ -53,3 +53,16 @@ export interface loginDataTypes {
   userName: string;
   profilePicture?: string;
 }
+
+export interface UserTypes {
+  id: number;
+  counrty: string;
+  creationDate: string;
+  email: string;
+  imagePath: string;
+  modificationDate: string;
+  phoneNumber: string;
+  userName: string;
+  isActivated: boolean;
+}
+

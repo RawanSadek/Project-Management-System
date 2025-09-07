@@ -17,7 +17,7 @@ export default function Navbar() {
   const [profileOpen, setProfileOpen] = useState(false);
 
   return (
-    <nav className="relative !px-4 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10">
+    <nav className="relative !px-4 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10 shadow-sm">
       <div className="relative flex items-center justify-between">
 
         <div className="items-center">
@@ -27,7 +27,7 @@ export default function Navbar() {
         <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
           {/* large screens */}
           <div className="hidden sm:flex items-center justify-between gap-5">
-            <FaBell className="text-xl text-[#EF9B28]" />
+            <FaBell className="text-xl text-[#EF9B28] cursor-pointer" />
 
             <div className="flex justify-between items-center gap-2 border-s border-gray-400 !px-7 cursor-pointer">
               <img src={loginData?.profilePicture ? loginData?.profilePicture : noPP} alt="pp" className="size-8 rounded-full bg-gray-800 outline -outline-offset-1 outline-white/10" />
