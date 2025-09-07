@@ -31,7 +31,7 @@ export default function ChangePassword() {
       toast.success(response.data.message);
       navigate("/login");
     } catch (error) {
-      console.log(error);
+      toast.error(error?.response.data.message);
     }
   };
 
@@ -40,8 +40,7 @@ export default function ChangePassword() {
   const [showConfirmPass, setShowConfirmPass] = useState(false);
 
   useEffect(() => {
-    if (watch("confirmNewPassword"))
-      trigger("confirmNewPassword");
+    if (watch("confirmNewPassword")) trigger("confirmNewPassword");
   }, [watch("newPassword")]);
 
   return (
