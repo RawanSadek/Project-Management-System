@@ -5,8 +5,14 @@ import { TbChecklist } from "react-icons/tb";
 import { GoProjectSymlink } from "react-icons/go";
 import ManagerDashboard from "../ManagerDashboard/ManagerDashboard";
 import EmployeeDashboard from "../EmployeeDashboard/EmployeeDashboard";
-import { axiosInstance, PROJECTS_URLS, TASKS_URLS } from "../../../../util/axios";
+import {
+  axiosInstance,
+  PROJECTS_URLS,
+  TASKS_URLS,
+} from "../../../../util/axios";
 import dataLoading from "../../../../assets/Images/dataLoading.gif";
+import type { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 export default function Home() {
   const { loginData } = useContext(AuthContext);
@@ -24,8 +30,9 @@ export default function Home() {
         response.data.toDo + response.data.inProgress + response.data.done;
       setTasksCount(count);
       setDoneCount(response.data.done);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
 
     setLoading(false);
@@ -36,19 +43,21 @@ export default function Home() {
       setLoading(true);
       let response;
       if (loginData?.userGroup == "Manager") {
-         response = await axiosInstance(PROJECTS_URLS.GET_ALL_PROJECTS, {
+        response = await axiosInstance(PROJECTS_URLS.GET_ALL_PROJECTS, {
           params: { pageSize: 99999 },
         });
-      }
-      else{
-         response = await axiosInstance('https://upskilling-egypt.com:3003/api/v1/Task?pageSize=10&pageNumber=1')
+      } else {
+        response = await axiosInstance(
+          "https://upskilling-egypt.com:3003/api/v1/Task?pageSize=10&pageNumber=1"
+        );
         //  , {
         //   params: { pageSize: 99999 },
         // });
       }
       setProjects(response?.data.data);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
     setLoading(false);
   };

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { SlUserFollowing, SlUserUnfollow } from "react-icons/sl";
 import { axiosInstance, USERS_URLS } from "../../../../util/axios";
-import dataLoading from '../../../../assets/Images/dataLoading.gif'
+import dataLoading from "../../../../assets/Images/dataLoading.gif";
 import type { UsersCountTypes } from "../../../../types/types";
-
+import type { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 export default function ManagerDashboard() {
   const [usersCount, setUsersCount] = useState<UsersCountTypes>();
@@ -14,8 +15,9 @@ export default function ManagerDashboard() {
       setLoading(true);
       const response = await axiosInstance(USERS_URLS.GET_USERS_COUNT);
       setUsersCount(response.data);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
     setLoading(false);
   };

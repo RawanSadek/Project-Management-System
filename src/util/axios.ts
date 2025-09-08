@@ -29,7 +29,7 @@ export const USERS_URLS = {
   GETUSERS: `/Users` ,
   GET_USERS_COUNT: `/Users/count` ,
   TOGGLE_USER: (id: number) => `/Users/${id}`,
-  GET_USER_DETAILS : (id: number) => `/Project/${id}` ,
+  GET_USER_DETAILS : (id: number) => `/Users/${id}` ,
 
 };
 // PROJECTS_URLS 
