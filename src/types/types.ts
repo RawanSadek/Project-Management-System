@@ -76,6 +76,7 @@ export interface UsersCountTypes{
   activatedEmployeeCount: number,
   deactivatedEmployeeCount: number
 }
+
 export interface ProjectTypes {
  id: number;
 title: string;
@@ -90,5 +91,38 @@ export interface FormDataProject {
   id?:number;
 title: string;
 description: string;
+}
+
+export interface TasksTypesForManager {
+  id: number;
+  title: string;
+  description: string;
+  status: string;
+  employee: {
+    id: number;
+    userName: string;
+  };
+  project: {
+    id: number;
+    title: string;
+  };
+  creationDate: string;
+}
+export interface TaskFormProps {
+  mode: "add" | "edit" | "view";
+  task?: {
+    id?: number;
+    title: string;
+    description: string;
+    employeeId: number;
+    projectId: number;
+  };
+  onSuccess?: () => void;
+}
+export interface TaskEditForm {
+  title: string;
+  description: string;
+  employeeId: number;
+  projectId: number;
 }
 

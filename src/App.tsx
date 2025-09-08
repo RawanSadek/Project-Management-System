@@ -18,6 +18,7 @@ import Profile from "./modules/Profile/components/Profile";
 import { ToastContainer } from "react-toastify";
 import { AuthContextProvider } from "./Contexts/AuthContext/AuthContext";
 import ProtectedRouted from "./modules/shared/components/ProtectedRouted/ProtectedRouted";
+import TasksData from "./modules/Tasks/components/Tasks/TasksData";
 
 function App() {
   const routes = createBrowserRouter([
@@ -50,6 +51,7 @@ function App() {
 
         { path: "project-data/:id?", element: <ProjectsData /> },
         { path: "tasks", element: <Tasks /> },
+        { path: "tasks-data", element: <TasksData /> },
         { path: "users", element: <Users /> },
         { path: "profile", element: <Profile /> },
       ],
