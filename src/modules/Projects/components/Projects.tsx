@@ -1,9 +1,4 @@
-import {
-  FiEdit2,
-  FiEye,
-  FiPlus,
-  FiTrash2,
-} from "react-icons/fi";
+import { FiEdit2, FiEye, FiPlus, FiTrash2 } from "react-icons/fi";
 import { GoSearch } from "react-icons/go";
 import { RiExpandUpDownLine } from "react-icons/ri";
 import dataLoading from "../../../assets/Images/loading.gif";
@@ -17,7 +12,7 @@ import { Link } from "react-router-dom";
 const Projects = () => {
   let [projects, setProjects] = useState<ProjectTypes[]>([]);
   let [loading, setLoading] = useState(false);
- let [actionsOpen, setActionsOpen] = useState(false);
+  let [actionsOpen, setActionsOpen] = useState(false);
   let [rowIdx, setRowIdx] = useState<number>();
 
   let getProjects = async () => {
@@ -32,7 +27,6 @@ const Projects = () => {
     setLoading(false);
   };
 
-
   useEffect(() => {
     getProjects();
   }, []);
@@ -46,13 +40,7 @@ const Projects = () => {
                focus:outline-none focus:ring-2 focus:ring-amber-300 active:translate-y-px cursor-pointer"
         >
           <FiPlus />
-        <Link
-            to={"/dashboard/Project-data"}
-           
-          >
-            
-            Add New Project
-          </Link>
+          <Link to={"/dashboard/Project-data"}>Add New Project</Link>
         </button>
       </div>
       <div className="bg-white !my-5 !mx-8 text-3xl rounded-lg">
@@ -110,14 +98,18 @@ const Projects = () => {
           </thead>
 
           <tbody>
-  {loading && (
-    <tr>
-      <td colSpan={6} className="py-10">
-        <img src={dataLoading} alt="loading" className="w-20 h-20 mt-3 mx-auto" />
-      </td>
-    </tr>
-  )}
-            {!loading && (
+             {loading && (
+                <tr>
+                  <td colSpan={6} className="!py-10">
+                    <img
+                      src={dataLoading}
+                      alt="loading"
+                      className="w-20 h-20 !mt-3 !mx-auto"
+                    />
+                  </td>
+                </tr>
+              )}
+              {!loading && (
               <>
                 {projects?.map((project: ProjectTypes) => (
                   <tr
@@ -138,7 +130,7 @@ const Projects = () => {
                     </td>
                     <td className="!p-4">{project?.description}</td>
                     <td className="!p-4">
-                        {new Date(project?.creationDate).toLocaleDateString(
+                      {new Date(project?.creationDate).toLocaleDateString(
                         "en-GB"
                       )}
                     </td>
@@ -147,7 +139,7 @@ const Projects = () => {
                         "en-GB"
                       )}
                     </td>
-                   <td className="!p-4 relative">
+                    <td className="!p-4 relative">
                       <HiDotsVertical
                         onClick={() => {
                           setActionsOpen(!actionsOpen);
@@ -156,24 +148,32 @@ const Projects = () => {
                         className="text-xl cursor-pointer"
                       />
                       {actionsOpen && rowIdx == project?.id && (
-                        <div className=" cursor-pointer absolute right-12 top-[70%] w-48 origin-top-right bg-white !py-3 shadow-lg border-1 border-gray-100 ring-opacity-5 z-50 rounded-2xl">
-                          <div className=" !px-4 !py-2 text-sm ">
-                            <button className="flex w-full items-center gap-2 rounded-lg px-3 py-2  hover:bg-slate-100">
-                              <FiEye className=" text-emerald-600" /> 
-                              <Link to={`/dashboard/project-data/${project.id}?mode=view`}>View</Link>
-
+                        <div className=" absolute right-12 top-[70%] w-48 origin-top-right bg-white !py-3 shadow-lg border-1 border-gray-100 ring-opacity-5 z-50 rounded-2xl">
+                          <div className="w-full flex items-center gap-2 !px-4 !py-2 text-sm hover:bg-[#F8F9FB] cursor-pointer">
+                            {" "}
+                            <button className="flex w-full items-center gap-2 rounded-lg !px-3 !py-2  hover:bg-slate-100">
+                              <FiEye className=" text-emerald-600" />
+                              <Link
+                                to={`/dashboard/project-data/${project.id}?mode=view`}
+                              >
+                                View
+                              </Link>
                             </button>
                           </div>
-                          <div className=" !px-4 !py-2 text-sm">
-                            <button className="flex w-full items-center gap-2 rounded-lg px-3 py-2 hover:bg-slate-50">
-                              <FiEdit2 className=" text-emerald-600" /> 
-                              <Link to={`/dashboard/project-data/${project.id}?mode=edit`}>Edit</Link>
+                          <div className="w-full flex items-center gap-2 !px-4 !py-2 text-sm hover:bg-[#F8F9FB] cursor-pointer">
+                            <button className="flex w-full items-center gap-2 rounded-lg !px-2 !py-2 hover:bg-slate-50">
+                              <FiEdit2 className=" text-emerald-600" />
+                              <Link
+                                to={`/dashboard/project-data/${project.id}?mode=edit`}
+                              >
+                                Edit
+                              </Link>
                             </button>
                           </div>
-                          <div className=" !px-4 !py-2 text-sm ">
-                            <button className="flex w-full items-center gap-2 rounded-lg px-3 py-2 hover:bg-slate-50">
-                           
-                              <FiTrash2    className=" text-emerald-600" /> <span>Delete</span>
+                          <div className="w-full flex items-center gap-2 !px-4 !py-2 text-sm hover:bg-[#F8F9FB] cursor-pointer">
+                            <button className="flex w-full items-center gap-2 rounded-lg !px-3 !py-2 hover:bg-slate-50">
+                              <FiTrash2 className=" text-emerald-600" />{" "}
+                              <span>Delete</span>
                             </button>
                           </div>
                         </div>
@@ -186,8 +186,7 @@ const Projects = () => {
           </tbody>
         </table>
       </div>
-        {/* Delete Project  */}
-     
+      {/* Delete Project  */}
     </>
   );
 };
