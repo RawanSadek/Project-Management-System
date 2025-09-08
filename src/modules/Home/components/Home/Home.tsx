@@ -47,12 +47,9 @@ export default function Home() {
           params: { pageSize: 99999 },
         });
       } else {
-        response = await axiosInstance(
-          "https://upskilling-egypt.com:3003/api/v1/Task?pageSize=10&pageNumber=1"
-        );
-        //  , {
-        //   params: { pageSize: 99999 },
-        // });
+        response = await axiosInstance(PROJECTS_URLS.GET_EMPLOYEE_PROJECTS, {
+          params: { pageSize: 99999 },
+        });
       }
       setProjects(response?.data.data);
     } catch (err) {
@@ -119,9 +116,10 @@ export default function Home() {
                       {tasksCount == 0 ? (
                         <p className="text-2xl">0%</p>
                       ) : (
-                        <p className="text-2xl">{`${
-                          ((doneCount / tasksCount) * 100).toFixed(2)
-                        }%`}</p>
+                        <p className="text-2xl">{`${(
+                          (doneCount / tasksCount) *
+                          100
+                        ).toFixed(2)}%`}</p>
                       )}
                     </>
                   )}
