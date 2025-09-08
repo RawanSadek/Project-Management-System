@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import DeleteConfirmation from "./../../shared/components/DeleteConfirmation/DeleteConfirmation";
 import noData from "../../../assets/Images/no-data.jpg";
 import { useNavigate } from "react-router-dom";
+import type { AxiosError } from "axios";
 const statusColors: Record<string, string> = {
   ToDo: "bg-purple-100 text-purple-700",
   InProgress: "bg-orange-200 text-orange-700",
@@ -22,11 +23,11 @@ const Table = () => {
   const [loading, setLoading] = useState(false);
   const [actionsOpen, setActionsOpen] = useState(false);
   const [rowIdx, setRowIdx] = useState<number>();
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(5);
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(1);
-  const totalPages = Math.ceil(totalResults / pageSize);
-  const pageSizes = [10, 20, 50];
+  const totalPages = totalResults;
+  const pageSizes = [5, 10, 20, 50];
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -37,8 +38,10 @@ const Table = () => {
         TASKS_URLS.GET_PROJECT_TASKS_MANAGER(pageSize, page)
       );
       setTasks(response.data.data);
-      setTotalResults(response.data.total);
-    } catch (error) {
+      setTotalResults(response.data.totalNumberOfPages);
+      console.log(response.data.totalNumberOfRecords);
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
       toast.error(error?.response?.data?.message);
     }
     setLoading(false);
@@ -49,7 +52,8 @@ const Table = () => {
       const response = await axiosInstance.delete(TASKS_URLS.DELETE_TASKS(id));
       toast.success(response.data.message || "Task deleted successfully");
       getTasks();
-    } catch (error) {
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
       toast.error(error?.response?.data?.message);
     }
     setLoading(false);

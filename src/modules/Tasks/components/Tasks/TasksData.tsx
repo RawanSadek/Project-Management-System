@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import type { TaskEditForm, TaskFormProps } from "../../../../types/types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import type { AxiosError } from "axios";
 
 const TasksData = ({ mode = "add", task, onSuccess }: TaskFormProps) => {
   const {
@@ -38,7 +39,10 @@ const TasksData = ({ mode = "add", task, onSuccess }: TaskFormProps) => {
       navigate("/dashboard/tasks");
       if (onSuccess) onSuccess();
     } catch (err) {
-      toast.error("An error occurred. Please try again.");
+      const error = err as AxiosError<{ message: string }>;
+      toast.error(
+        error.response?.data?.message || "An error occurred. Please try again."
+      );
     }
   };
   const [projects, setProjects] = useState<any[]>([]);
