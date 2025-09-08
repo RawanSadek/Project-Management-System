@@ -23,6 +23,7 @@ export default function Users() {
   const [filterOptionsOpen, setFilterOptionsOpen] = useState(false);
   const [filtersList, setFiltersList] = useState<string[]>([]);
   const [userDetails, setUserDetails] = useState<UserTypes | null>(null);
+  const [detailsLoading, setDetailsLoading] = useState(false);
 
   const toggleInFiltersList = (value: string) => {
     setFiltersList((prev) =>
@@ -137,13 +138,14 @@ export default function Users() {
 
   const getUserDetails = async (id: number) => {
     try {
-      setLoading(true);
+      setDetailsLoading(true);
       const response = await axiosInstance.get(USERS_URLS.GET_USER_DETAILS(id));
       setUserDetails(response.data);
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
       toast.error(error.response?.data?.message || "Something went wrong");
     }
+    setDetailsLoading(false);
   };
 
   useEffect(() => {
@@ -157,6 +159,8 @@ export default function Users() {
   }, []);
 
   // User Details Modal
+  Modal.setAppElement("#root");
+
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const customStyles = {
     content: {
@@ -173,8 +177,19 @@ export default function Users() {
   function openModal(id: number) {
     setModalIsOpen(true);
     getUserDetails(id);
+    setActionsOpen(false);
   }
 
+  const TableHead = [
+    "User Name",
+    "Status",
+    "Phone Number",
+    "Email",
+    "Country",
+    "Creation Date",
+    "",
+  ];
+  
 
   return (
     <>
@@ -183,7 +198,7 @@ export default function Users() {
         <h2>Users</h2>
       </div>
 
-      <div className="bg-white !my-5 !mx-8 text-3xl rounded-lg shadow-lg overflow-hidden">
+      <div className="bg-white !my-5 !mx-8 text-3xl rounded-lg shadow-lg">
         {/* Search Container */}
         <div className="!p-4 flex gap-2">
           <div
@@ -308,71 +323,48 @@ export default function Users() {
         </div>
 
         {/* Table */}
-        <table className="w-full">
+        <table className="w-full ">
           <thead className="bg-[#315951E5]">
             <tr className="text-sm text-white">
-              <th className="font-light !p-4 border-e border-black">
-                <div className="flex items-center">
-                  User Name <RiExpandUpDownLine className="!ms-2 text-lg" />
-                </div>
-              </th>
-
-              <th className="font-light !p-4 border-e border-black">
-                <div className="flex items-center">
-                  Statuses <RiExpandUpDownLine className="!ms-2 text-lg" />
-                </div>
-              </th>
-
-              <th className="font-light !p-4 border-e border-black">
-                <div className="flex items-center">
-                  Phone Number <RiExpandUpDownLine className="!ms-2 text-lg" />
-                </div>
-              </th>
-
-              <th className="font-light !p-4 border-e  border-black">
-                <div className="flex items-center">
-                  Email <RiExpandUpDownLine className="!ms-2 text-lg" />
-                </div>
-              </th>
-
-              <th className="font-light !p-4 border-e border-black">
-                <div className="flex items-center">
-                  Country <RiExpandUpDownLine className="!ms-2 text-lg" />
-                </div>
-              </th>
-
-              <th className="font-light !p-4 border-e border-black">
-                <div className="flex items-center">
-                  Creation Date <RiExpandUpDownLine className="!ms-2 text-lg" />
-                </div>
-              </th>
-
-              <th className="font-light !p-4"></th>
+              {TableHead.map((head) => (
+                <th
+                  key={head}
+                  className="font-light !p-4 border-e border-black"
+                >
+                  <div className="flex items-center">
+                    {head} <RiExpandUpDownLine className="!ms-2 text-lg" />
+                  </div>
+                </th>
+              ))}
             </tr>
           </thead>
 
           <tbody>
             {/* Loading */}
             {loading && (
-              <td colSpan={7} className="!py-10">
-                <img
-                  src={dataLoading}
-                  alt="loading"
-                  className="w-20 h-20 !mt-3 !mx-auto"
-                />
-              </td>
+              <tr>
+                <td colSpan={7} className="!py-10">
+                  <img
+                    src={dataLoading}
+                    alt="loading"
+                    className="w-20 h-20 !mt-3 !mx-auto"
+                  />
+                </td>
+              </tr>
             )}
 
             {/* No Data */}
             {!loading && users.length == 0 && (
-              <td colSpan={7} className="!py-10 text-center">
-                <img
-                  src={noData}
-                  className="!mx-auto w-[40%]"
-                  alt="no data"
-                ></img>
-                <h3 className="font-bold">No Data Found!</h3>
-              </td>
+              <tr>
+                <td colSpan={7} className="!py-10 text-center">
+                  <img
+                    src={noData}
+                    className="!mx-auto w-[40%]"
+                    alt="no data"
+                  ></img>
+                  <h3 className="font-bold">No Data Found!</h3>
+                </td>
+              </tr>
             )}
 
             {/* Data Listing */}
@@ -381,7 +373,7 @@ export default function Users() {
                 {users?.map((user: UserTypes) => (
                   <tr
                     key={user.id}
-                    className="odd:bg-white even:bg-[#F5F5F5] text-sm"
+                    className="odd:bg-white even:bg-[#F5F5F5] text-sm hover:bg-gray-200"
                   >
                     <td className="!p-4">{user?.userName}</td>
                     <td className="!p-4 ">
@@ -453,10 +445,9 @@ export default function Users() {
         </table>
       </div>
 
-      {/* View Users Details */}
+      {/* View Users Details Modal */}
       <Modal
         isOpen={modalIsOpen}
-        // onAfterOpen={afterOpenModal}
         onRequestClose={() => setModalIsOpen(false)}
         style={customStyles}
         contentLabel="Example Modal"
@@ -468,56 +459,67 @@ export default function Users() {
           <RiCloseLargeLine className="text-xl" />
         </button>
 
-        <div className="flex items-center gap-3">
-          <div className=" text-center">
+        <div className="flex flex-col items-center lg:flex-row gap-3">
+          {detailsLoading && (
             <img
-              src={noPP}
-              alt="no pp"
-              className="rounded-full w-[90%] !mx-auto !mb-5"
+              src={dataLoading}
+              alt="loading"
+              className="w-20 h-20 !my-5 !mx-auto"
             />
+          )}
+          {!detailsLoading && (
+            <>
+              <div className=" text-center">
+                <img
+                  src={userDetails?.imagePath ? userDetails?.imagePath : noPP}
+                  alt="no pp"
+                  className="rounded-full w-[90%] !mx-auto !mb-5"
+                />
 
-            {userDetails?.isActivated == true ? (
-              <div className="rounded-2xl bg-[#009247] w-fit !py-0.5 !px-3 text-white font-light !mx-auto">
-                Active
-              </div>
-            ) : (
-              <div className="rounded-2xl bg-[#922E25B2] w-fit !py-0.5 !px-3 text-white font-light !mx-auto">
-                Not Active
-              </div>
-            )}
-          </div>
-
-          <div className="flex-1 !px-6">
-            <div className="border-b border-gray-500 !pb-6">
-              <h2 className="text-2xl font-semibold capitalize ">
-                {userDetails?.userName}
-              </h2>
-              <small className="text-gray-400">
-                Title: {userDetails?.group.name}
-              </small>
-            </div>
-
-            <div className="!mt-6">
-              <p className="!mb-4">
-                <span className="font-semibold">Email:</span>{" "}
-                {userDetails?.email}
-              </p>
-              <p className="!mb-4">
-                <span className="font-semibold">Cuntry:</span>{" "}
-                {userDetails?.country}
-              </p>
-              <p className="!mb-4">
-                <span className="font-semibold">Phone Number:</span>{" "}
-                {userDetails?.phoneNumber}
-              </p>
-              <p className="!mb-4">
-                <span className="font-semibold">Joining Date:</span>{" "}
-                {new Date(userDetails?.creationDate || "").toLocaleDateString(
-                  "en-GB"
+                {userDetails?.isActivated == true ? (
+                  <div className="rounded-2xl bg-[#009247] w-fit !py-0.5 !px-3 text-white font-light !mx-auto">
+                    Active
+                  </div>
+                ) : (
+                  <div className="rounded-2xl bg-[#922E25B2] w-fit !py-0.5 !px-3 text-white font-light !mx-auto">
+                    Not Active
+                  </div>
                 )}
-              </p>
-            </div>
-          </div>
+              </div>
+
+              <div className="flex-1 !px-6">
+                <div className="border-b border-gray-500 !pb-6 text-center lg:text-start">
+                  <h2 className="text-2xl font-semibold capitalize ">
+                    {userDetails?.userName}
+                  </h2>
+                  <small className="text-gray-400">
+                    Title: {userDetails?.group.name}
+                  </small>
+                </div>
+
+                <div className="!mt-6">
+                  <p className="!mb-4">
+                    <span className="font-semibold">Email:</span>{" "}
+                    {userDetails?.email}
+                  </p>
+                  <p className="!mb-4">
+                    <span className="font-semibold">Cuntry:</span>{" "}
+                    {userDetails?.country}
+                  </p>
+                  <p className="!mb-4">
+                    <span className="font-semibold">Phone Number:</span>{" "}
+                    {userDetails?.phoneNumber}
+                  </p>
+                  <p className="!mb-4">
+                    <span className="font-semibold">Joining Date:</span>{" "}
+                    {new Date(
+                      userDetails?.creationDate || ""
+                    ).toLocaleDateString("en-GB")}
+                  </p>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </Modal>
     </>
