@@ -56,7 +56,7 @@ export interface loginDataTypes {
 
 export interface UserTypes {
   id: number;
-  counrty: string;
+  country: string;
   creationDate: string;
   email: string;
   imagePath: string;
@@ -64,6 +64,17 @@ export interface UserTypes {
   phoneNumber: string;
   userName: string;
   isActivated: boolean;
+  group: { 
+    id: number,
+    name: string,
+    creationDate: string,
+    modificationDate: string
+  }
+}
+
+export interface UsersCountTypes{
+  activatedEmployeeCount: number,
+  deactivatedEmployeeCount: number
 }
 export interface TasksTypesForManager {
   id: number;

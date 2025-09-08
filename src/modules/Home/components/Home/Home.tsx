@@ -1,45 +1,63 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../../Contexts/AuthContext/AuthContext";
 import { LuChartNoAxesCombined } from "react-icons/lu";
-import { TbChecklist, TbReport } from "react-icons/tb";
+import { TbChecklist } from "react-icons/tb";
 import { GoProjectSymlink } from "react-icons/go";
 import ManagerDashboard from "../ManagerDashboard/ManagerDashboard";
 import EmployeeDashboard from "../EmployeeDashboard/EmployeeDashboard";
-import { axiosInstance, PROJECTS_URLS, TASKS_URLS } from "../../../../util/axios";
-import dataLoading from '../../../../assets/Images/dataLoading.gif'
+import {
+  axiosInstance,
+  PROJECTS_URLS,
+  TASKS_URLS,
+} from "../../../../util/axios";
+import dataLoading from "../../../../assets/Images/dataLoading.gif";
+import type { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 export default function Home() {
-  let { loginData } = useContext(AuthContext);
+  const { loginData } = useContext(AuthContext);
 
-  let [loading, setLoading] = useState(false);
-  let [tasksCount, setTasksCount] = useState(0);
-  let [doneCount, setDoneCount] = useState(0);
-  let [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [tasksCount, setTasksCount] = useState(0);
+  const [doneCount, setDoneCount] = useState(0);
+  const [projects, setProjects] = useState([]);
 
-  let getTasksCount = async () => {
+  const getTasksCount = async () => {
     try {
       setLoading(true);
-      let response = await axiosInstance(TASKS_URLS.GET_TASKS_COUNT);
-      let count =
+      const response = await axiosInstance(TASKS_URLS.GET_TASKS_COUNT);
+      const count =
         response.data.toDo + response.data.inProgress + response.data.done;
       setTasksCount(count);
       setDoneCount(response.data.done);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
 
     setLoading(false);
   };
 
-  let getProjects = async () => {
+  const getProjects = async () => {
     try {
       setLoading(true);
-      let response = await axiosInstance(PROJECTS_URLS.GET_ALL_PROJECTS, {
-        params: { pageSize: 99999 },
-      });
-      setProjects(response.data.data);
-    } catch (error) {
-      console.log(error);
+      let response;
+      if (loginData?.userGroup == "Manager") {
+        response = await axiosInstance(PROJECTS_URLS.GET_ALL_PROJECTS, {
+          params: { pageSize: 99999 },
+        });
+      } else {
+        response = await axiosInstance(
+          "https://upskilling-egypt.com:3003/api/v1/Task?pageSize=10&pageNumber=1"
+        );
+        //  , {
+        //   params: { pageSize: 99999 },
+        // });
+      }
+      setProjects(response?.data.data);
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
     setLoading(false);
   };
@@ -53,7 +71,7 @@ export default function Home() {
     <>
       <div className="!p-4 lg:!p-10 h-full">
         {/* Header */}
-        <div className="header h-[25%] lg:h-[50%] rounded-2xl">
+        <div className="header h-[25%] lg:h-[45%] rounded-2xl">
           <div className="header-overlay !px-5 flex flex-col justify-center rounded-2xl">
             <h2 className="text-2xl lg:text-4xl text-white !mb-6">
               Welcome{" "}
@@ -154,11 +172,8 @@ export default function Home() {
             </div>
           </div>
 
-
-          {loginData?.userGroup=='Manager' && <ManagerDashboard/>}
-          {loginData?.userGroup=='Employee' && <EmployeeDashboard/>}
-
-
+          {loginData?.userGroup == "Manager" && <ManagerDashboard />}
+          {loginData?.userGroup == "Employee" && <EmployeeDashboard />}
         </div>
       </div>
     </>
