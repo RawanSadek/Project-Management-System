@@ -14,6 +14,8 @@ import { IoFilterSharp } from "react-icons/io5";
 import { CgUnblock } from "react-icons/cg";
 import Modal from "react-modal";
 import noPP from "../../../../assets/Images/noPP.png";
+import { IoIosArrowDown } from "react-icons/io";
+import { TfiAngleLeft, TfiAngleRight } from "react-icons/tfi";
 
 export default function Users() {
   const [users, setUsers] = useState<UserTypes[]>([]);
@@ -37,6 +39,7 @@ export default function Users() {
     email: string,
     country: string,
     groups: string,
+    pageSize: number,
     pageNumber: number
   ) => {
     try {
@@ -47,11 +50,13 @@ export default function Users() {
           email: email,
           country: country,
           groups: groups,
-          pageSize: 5,
+          pageSize: pageSize,
           pageNumber: pageNumber,
         },
       });
       setUsers(response.data.data);
+      setTotalNumberOfPages(response.data.totalNumberOfPages);
+      setTotalNumberOfRecords(response.data.totalNumberOfRecords);
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
       toast.error(error.response?.data?.message || "Something went wrong");
@@ -74,7 +79,8 @@ export default function Users() {
       emailSearchValue,
       countrySearchValue,
       groupSearchValue,
-      1
+      pageSize,
+      page
     );
     // setActivePage(1);
   };
@@ -86,7 +92,8 @@ export default function Users() {
       input.target.value,
       countrySearchValue,
       groupSearchValue,
-      1
+      pageSize,
+      page
     );
     // setActivePage(1);
   };
@@ -100,7 +107,8 @@ export default function Users() {
       emailSearchValue,
       input.target.value,
       groupSearchValue,
-      1
+      pageSize,
+      page
     );
     // setActivePage(1);
   };
@@ -114,7 +122,8 @@ export default function Users() {
       emailSearchValue,
       countrySearchValue,
       selection.target.value,
-      1
+      pageSize,
+      page
     );
     // setActivePage(1);
   };
@@ -128,7 +137,8 @@ export default function Users() {
         emailSearchValue,
         countrySearchValue,
         groupSearchValue,
-        1
+        pageSize,
+        page
       );
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
@@ -147,16 +157,6 @@ export default function Users() {
     }
     setDetailsLoading(false);
   };
-
-  useEffect(() => {
-    getUsers(
-      userNameSearchValue,
-      emailSearchValue,
-      countrySearchValue,
-      groupSearchValue,
-      1
-    );
-  }, []);
 
   // User Details Modal
   Modal.setAppElement("#root");
@@ -189,7 +189,25 @@ export default function Users() {
     "Creation Date",
     "",
   ];
-  
+
+  // Pagination
+  const [pageSize, setPageSize] = useState(5);
+  const [page, setPage] = useState(1);
+  const [totalNumberOfPages, setTotalNumberOfPages] = useState(1);
+  const [totalNumberOfRecords, setTotalNumberOfRecords] = useState(1);
+  const totalPages = totalNumberOfPages ;
+  const pageSizes = [5, 8, 10, 12, 20];
+
+  useEffect(() => {
+    getUsers(
+      userNameSearchValue,
+      emailSearchValue,
+      countrySearchValue,
+      groupSearchValue,
+      pageSize,
+      page
+    );
+  }, [pageSize, page]);
 
   return (
     <>
@@ -198,7 +216,7 @@ export default function Users() {
         <h2>Users</h2>
       </div>
 
-      <div className="bg-white !my-5 !mx-8 text-3xl rounded-lg shadow-lg">
+      <div className="bg-white !my-5 !mx-8 text-3xl rounded-lg shadow-lg !py-5">
         {/* Search Container */}
         <div className="!p-4 flex gap-2">
           <div
@@ -442,6 +460,59 @@ export default function Users() {
               </>
             )}
           </tbody>
+
+          <tfoot className="border-t border-gray-200 ">
+            <tr className="text-right">
+              <td colSpan={7} className="!pt-5 !pb-2 !px-5">
+                {/** Pagination Controls */}
+                <div className="flex justify-end items-center mt-4 text-gray-600 text-sm">
+                  <div className="flex items-center gap-2">
+                    <span>Showing</span>
+                    <div className="relative">
+                      <select
+                        value={pageSize}
+                        onChange={(e) => {
+                          setPageSize(Number(e.target.value));
+                          setPage(1);
+                        }}
+                        className="appearance-none !px-4 !py-1 rounded-full border border-gray-300 focus:outline-none bg-white text-gray-700 font-semibold"
+                        style={{ minWidth: 60 }}
+                      >
+                        {pageSizes.map((size) => (
+                          <option key={size} value={size}>
+                            {size}
+                          </option>
+                        ))}
+                      </select>
+                      <span className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                        <IoIosArrowDown className="text-lg"/>
+                      </span>
+                    </div>
+                    <span>of <span className="font-semibold !mx-1">{totalNumberOfRecords}</span> Results</span>
+                  </div>
+                  <div className="flex items-center gap-4 !ms-6">
+                    <span>
+                      Page <span className="font-semibold !mx-1">{page}</span> of <span className="font-semibold !mx-1">{totalPages}</span>
+                    </span>
+                    <button
+                      className="rounded-full px-2 py-1 text-xl text-gray-400 hover:text-gray-700 disabled:opacity-50"
+                      onClick={() => setPage(page - 1)}
+                      disabled={page === 1}
+                    >
+                      <TfiAngleLeft className="cursor-pointer"/>
+                    </button>
+                    <button
+                      className="rounded-full px-2 py-1 text-xl text-gray-400 hover:text-gray-700 disabled:opacity-50"
+                      onClick={() => setPage(page + 1)}
+                      disabled={page === totalPages}
+                    >
+                      <TfiAngleRight className="cursor-pointer"/>
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
 
