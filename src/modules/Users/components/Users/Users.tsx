@@ -122,7 +122,9 @@ export default function Users() {
                     </td>
                     <td className="!p-4">{user?.phoneNumber}</td>
                     <td className="!p-4">{user?.email}</td>
-                    <td className="!p-4">{new Date(user?.creationDate).toLocaleDateString("en-GB")}</td>
+                    <td className="!p-4">
+                      {new Date(user?.creationDate).toLocaleDateString("en-GB")}
+                    </td>
                     <td className="!p-4 relative">
                       <HiDotsVertical
                         onClick={() => {
