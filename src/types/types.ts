@@ -76,6 +76,23 @@ export interface UsersCountTypes{
   activatedEmployeeCount: number,
   deactivatedEmployeeCount: number
 }
+
+export interface ProjectTypes {
+ id: number;
+title: string;
+isVerified:boolean;
+isActivated: boolean;
+description: string;
+creationDate: string;
+modificationDate: string;
+}
+
+export interface FormDataProject { 
+  id?:number;
+title: string;
+description: string;
+}
+
 export interface TasksTypesForManager {
   id: number;
   title: string;
@@ -108,3 +125,4 @@ export interface TaskEditForm {
   employeeId: number;
   projectId: number;
 }
+

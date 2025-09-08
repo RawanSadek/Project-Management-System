@@ -48,6 +48,8 @@ function App() {
         { path: "", element: <Home /> },
         { path: "projects", element: <Projects /> },
         { path: "project-data", element: <ProjectsData /> },
+
+        { path: "project-data/:id?", element: <ProjectsData /> },
         { path: "tasks", element: <Tasks /> },
         { path: "tasks-data", element: <TasksData /> },
         { path: "users", element: <Users /> },
