@@ -120,7 +120,7 @@ export default function Home() {
                         <p className="text-2xl">0%</p>
                       ) : (
                         <p className="text-2xl">{`${
-                          (doneCount / tasksCount) * 100
+                          ((doneCount / tasksCount) * 100).toFixed(2)
                         }%`}</p>
                       )}
                     </>
