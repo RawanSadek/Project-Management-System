@@ -13,6 +13,7 @@ import {
 import dataLoading from "../../../../assets/Images/dataLoading.gif";
 import type { AxiosError } from "axios";
 import { toast } from "react-toastify";
+import type { TasksCount } from "../../../../types/types";
 
 export default function Home() {
   const { loginData } = useContext(AuthContext);
@@ -21,11 +22,13 @@ export default function Home() {
   const [tasksCount, setTasksCount] = useState(0);
   const [doneCount, setDoneCount] = useState(0);
   const [projects, setProjects] = useState([]);
+  const [tasks, setTasks] = useState<TasksCount | null>(null);
 
   const getTasksCount = async () => {
     try {
       setLoading(true);
       const response = await axiosInstance(TASKS_URLS.GET_TASKS_COUNT);
+      setTasks(response.data) // saving the tasks (TODO, in progress and done) to send them as props to the employee dashboard
       const count =
         response.data.toDo + response.data.inProgress + response.data.done;
       setTasksCount(count);
@@ -170,8 +173,10 @@ export default function Home() {
             </div>
           </div>
 
-          {loginData?.userGroup == "Manager" && <ManagerDashboard />}
-          {loginData?.userGroup == "Employee" && <EmployeeDashboard />}
+          <div className="w-full lg:w-1/2 !py-5 rounded-xl shadow-s">
+            {loginData?.userGroup == "Manager" && <ManagerDashboard />}
+            {loginData?.userGroup == "Employee" && <EmployeeDashboard tasks={tasks} />}
+          </div>
         </div>
       </div>
     </>
