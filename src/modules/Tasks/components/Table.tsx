@@ -12,6 +12,8 @@ import DeleteConfirmation from "./../../shared/components/DeleteConfirmation/Del
 import noData from "../../../assets/Images/no-data.jpg";
 import { useNavigate } from "react-router-dom";
 import type { AxiosError } from "axios";
+import { IoIosArrowDown } from "react-icons/io";
+import { TfiAngleLeft, TfiAngleRight } from "react-icons/tfi";
 const statusColors: Record<string, string> = {
   ToDo: "bg-purple-100 text-purple-700",
   InProgress: "bg-orange-200 text-orange-700",
@@ -19,13 +21,14 @@ const statusColors: Record<string, string> = {
 };
 
 const Table = () => {
-  const [tasks, setTasks] =useState<TasksTypesForManager[]>([]);
+  const [tasks, setTasks] = useState<TasksTypesForManager[]>([]);
   const [loading, setLoading] = useState(false);
   const [actionsOpen, setActionsOpen] = useState(false);
   const [rowIdx, setRowIdx] = useState<number>();
   const [pageSize, setPageSize] = useState(5);
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(1);
+  const [totalNumberOfRecords, setTotalNumberOfRecords] = useState(1);
   const totalPages = totalResults;
   const pageSizes = [5, 10, 20, 50];
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -47,6 +50,7 @@ const Table = () => {
       );
       setTasks(response.data.data);
       setTotalResults(response.data.totalNumberOfPages);
+      setTotalNumberOfRecords(response.data.totalNumberOfRecords);
       console.log(response.data.totalNumberOfRecords);
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
@@ -82,18 +86,20 @@ const Table = () => {
   }, [pageSize, page]);
   return (
     <div className="!p-4 bg-[#F7F7F7] min-h-screen">
-      <div className="bg-white  shadow !p-4 ">
-        <div className="flex justify-start items-center gap-2 border border-gray-400 lg:w-[20%] rounded-full !px-3 !py-1 !mb-4">
-          <GoSearch className="text-lg text-gray-700" />
-          <input
-            id="price"
-            type="text"
-            name="price"
-            placeholder="Search Fleets"
-            className="min-w-0 grow   text-base placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
-          />
+      <div className="bg-white shadow !py-4 rounded-lg">
+        <div className="!px-4 !py-1">
+          <div className="flex justify-start items-center gap-2 border border-gray-400 lg:w-[20%] rounded-full !px-3 !py-1 !mb-4">
+            <GoSearch className="text-lg text-gray-700" />
+            <input
+              id="price"
+              type="text"
+              name="price"
+              placeholder="Search Fleets"
+              className="min-w-0 grow   text-base placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+            />
+          </div>
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto !px-5 lg:!px-0">
           <table className="w-full">
             <thead className="bg-[#315951E5]">
               <tr className="text-sm text-white">
@@ -129,8 +135,10 @@ const Table = () => {
                       key={task?.id}
                       className="odd:bg-white even:bg-[#F5F5F5] text-sm hover:bg-gray-200"
                     >
-                      <td className="!p-4">{task?.title}</td>
-                      <td className={`!p-4  `}>
+                      <td data-label="Title:" className="!p-4 table-data">
+                        {task?.title}
+                      </td>
+                      <td data-label="Status:" className={`!p-4 table-data  `}>
                         <span
                           className={` rounded-full text-xs font-semibold !px-3   ${
                             statusColors[task?.status]
@@ -139,14 +147,21 @@ const Table = () => {
                           {task?.status}
                         </span>
                       </td>
-                      <td className="!p-4">{task?.employee?.userName}</td>
-                      <td className="!p-4">{task?.project?.title}</td>
-                      <td className="!p-4">
+                      <td data-label="Employee:" className="!p-4 table-data">
+                        {task?.employee?.userName}
+                      </td>
+                      <td data-label="Project:" className="!p-4 table-data">
+                        {task?.project?.title}
+                      </td>
+                      <td
+                        data-label="Creation Date:"
+                        className="!p-4 table-data"
+                      >
                         {new Date(task?.creationDate).toLocaleDateString(
                           "en-GB"
                         )}
                       </td>
-                      <td className="!p-4 relative">
+                      <td className="!p-4 table-data relative">
                         <HiDotsVertical
                           onClick={() => {
                             setActionsOpen(!actionsOpen);
@@ -208,7 +223,7 @@ const Table = () => {
           </table>
         </div>
         {/** Pagination Controls */}
-        <div className="flex justify-end items-center mt-4 text-gray-600 text-sm">
+        <div className="flex justify-end items-center border-t border-gray-200 !p-5 text-gray-600 text-[10px] md:text-sm">
           <div className="flex items-center gap-2">
             <span>Showing</span>
             <div className="relative">
@@ -218,7 +233,7 @@ const Table = () => {
                   setPageSize(Number(e.target.value));
                   setPage(1);
                 }}
-                className="appearance-none px-4 py-1 rounded-full border border-gray-300 focus:outline-none bg-white text-gray-700 font-semibold"
+                className="appearance-none !px-4 !py-1 rounded-full border border-gray-300 focus:outline-none bg-white text-gray-700 font-semibold"
                 style={{ minWidth: 60 }}
               >
                 {pageSizes.map((size) => (
@@ -228,28 +243,35 @@ const Table = () => {
                 ))}
               </select>
               <span className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                &#9660;
+                <IoIosArrowDown className="text-[10px] md:text-sm" />
               </span>
             </div>
-            <span>of {totalResults} Results</span>
-          </div>
-          <div className="flex items-center gap-4">
             <span>
-              Page {page} of {totalPages}
+              of{" "}
+              <span className="font-semibold !mx-1">
+                {totalNumberOfRecords}
+              </span>{" "}
+              Results
+            </span>
+          </div>
+          <div className="flex items-center gap-4 !ms-6">
+            <span>
+              Page <span className="font-semibold !mx-1">{page}</span> of{" "}
+              <span className="font-semibold !mx-1">{totalPages}</span>
             </span>
             <button
-              className="rounded-full border border-gray-300 px-2 py-1 text-xl text-gray-400 hover:text-gray-700 disabled:opacity-50"
+              className="rounded-full px-2 py-1 text-xl text-gray-400 hover:text-gray-700 disabled:opacity-50"
               onClick={() => setPage(page - 1)}
               disabled={page === 1}
             >
-              &#60;
+              <TfiAngleLeft className="cursor-pointer text-[10px] md:text-sm" />
             </button>
             <button
-              className="rounded-full border border-gray-300 px-2 py-1 text-xl text-gray-400 hover:text-gray-700 disabled:opacity-50"
+              className="rounded-full px-2 py-1 text-xl text-gray-400 hover:text-gray-700 disabled:opacity-50"
               onClick={() => setPage(page + 1)}
               disabled={page === totalPages}
             >
-              &#62;
+              <TfiAngleRight className="cursor-pointer text-[10px] md:text-sm" />
             </button>
           </div>
         </div>

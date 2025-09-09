@@ -82,7 +82,7 @@ export default function Users() {
       pageSize,
       page
     );
-    // setActivePage(1);
+    setPage(1);
   };
 
   const getEmailSearchValue = (input: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,7 +95,7 @@ export default function Users() {
       pageSize,
       page
     );
-    // setActivePage(1);
+    setPage(1);
   };
 
   const getCountrySearchValue = (
@@ -110,7 +110,7 @@ export default function Users() {
       pageSize,
       page
     );
-    // setActivePage(1);
+    setPage(1);
   };
 
   const getGroupSearchValue = (
@@ -125,7 +125,7 @@ export default function Users() {
       pageSize,
       page
     );
-    // setActivePage(1);
+    setPage(1);
   };
 
   const toggleUserStatus = async (id: number) => {
@@ -218,12 +218,12 @@ export default function Users() {
 
       <div className="bg-white !my-5 !mx-8 text-3xl rounded-lg shadow-lg !py-5">
         {/* Search Container */}
-        <div className="!p-4 flex gap-2">
+        <div className="!p-4 flex flex-col lg:flex-row gap-2">
           <div
             hidden={!filtersList.includes("username")}
             className="flex justify-start items-center gap-2 border border-gray-400 lg:w-[20%] rounded-full !px-3 !py-1"
           >
-            <GoSearch className="text-lg text-gray-700" />
+            <GoSearch className="text-lg text-gray-700 " />
             <input
               onChange={(e) => getUserNameSearchValue(e)}
               id="username"
@@ -274,7 +274,7 @@ export default function Users() {
               defaultValue=""
               name="group"
               id="group"
-              className="text-sm w-[80%] focus:outline-0"
+              className="text-sm w-[96%] lg:w-[80%] focus:outline-0"
             >
               <option value="" disabled hidden>
                 Search by Group
@@ -295,7 +295,7 @@ export default function Users() {
             </button>
 
             {filterOptionsOpen && (
-              <div className="absolute flex flex-col gap-2 top-[90%] right-[10%] w-50 bg-white border border-gray-100 shadow-xl rounded-lg  z-50 !py-3 text-[16px]">
+              <div className="absolute flex flex-col gap-2 top-[90%] lg:right-[10%] w-50 bg-white border border-gray-100 shadow-xl rounded-lg z-50 !py-3 text-[16px]">
                 <label className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 rounded-md !p-2">
                   <input
                     type="checkbox"
@@ -341,7 +341,8 @@ export default function Users() {
         </div>
 
         {/* Table */}
-        <table className="w-full ">
+        <div className="!px-5 lg:!px-0">
+        <table className="w-full">
           <thead className="bg-[#315951E5]">
             <tr className="text-sm text-white">
               {TableHead.map((head) => (
@@ -360,7 +361,7 @@ export default function Users() {
           <tbody>
             {/* Loading */}
             {loading && (
-              <tr>
+              <tr className="!border-0">
                 <td colSpan={7} className="!py-10">
                   <img
                     src={dataLoading}
@@ -393,8 +394,8 @@ export default function Users() {
                     key={user.id}
                     className="odd:bg-white even:bg-[#F5F5F5] text-sm hover:bg-gray-200"
                   >
-                    <td className="!p-4">{user?.userName}</td>
-                    <td className="!p-4 ">
+                    <td data-label="User Name:" className="!p-4 table-data">{user?.userName}</td>
+                    <td data-label="Status:" className="!p-4 table-data ">
                       {user?.isActivated == true ? (
                         <div className="rounded-2xl bg-[#009247] w-fit !py-0.5 !px-3 text-white font-light">
                           Active
@@ -405,13 +406,13 @@ export default function Users() {
                         </div>
                       )}
                     </td>
-                    <td className="!p-4">{user?.phoneNumber}</td>
-                    <td className="!p-4">{user?.email}</td>
-                    <td className="!p-4">{user?.country}</td>
-                    <td className="!p-4">
+                    <td data-label="Phone Number:" className="!p-4 table-data">{user?.phoneNumber}</td>
+                    <td data-label="Email:" className="!p-4 table-data">{user?.email}</td>
+                    <td data-label="Country:" className="!p-4 table-data">{user?.country}</td>
+                    <td data-label="Creation Date:" className="!p-4 table-data">
                       {new Date(user?.creationDate).toLocaleDateString("en-GB")}
                     </td>
-                    <td className="!p-4 relative">
+                    <td className="!p-4 table-data relative">
                       <HiDotsVertical
                         onClick={() => {
                           setActionsOpen(!actionsOpen);
@@ -465,7 +466,7 @@ export default function Users() {
             <tr className="text-right">
               <td colSpan={7} className="!pt-5 !pb-2 !px-5">
                 {/** Pagination Controls */}
-                <div className="flex justify-end items-center mt-4 text-gray-600 text-sm">
+                <div className="flex justify-end items-center mt-4 text-gray-600 text-[10px] md:text-sm">
                   <div className="flex items-center gap-2">
                     <span>Showing</span>
                     <div className="relative">
@@ -485,7 +486,7 @@ export default function Users() {
                         ))}
                       </select>
                       <span className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                        <IoIosArrowDown className="text-lg"/>
+                        <IoIosArrowDown className="text-[10px] md:text-sm"/>
                       </span>
                     </div>
                     <span>of <span className="font-semibold !mx-1">{totalNumberOfRecords}</span> Results</span>
@@ -499,14 +500,14 @@ export default function Users() {
                       onClick={() => setPage(page - 1)}
                       disabled={page === 1}
                     >
-                      <TfiAngleLeft className="cursor-pointer"/>
+                      <TfiAngleLeft className="cursor-pointer text-[10px] md:text-sm"/>
                     </button>
                     <button
                       className="rounded-full px-2 py-1 text-xl text-gray-400 hover:text-gray-700 disabled:opacity-50"
                       onClick={() => setPage(page + 1)}
                       disabled={page === totalPages}
                     >
-                      <TfiAngleRight className="cursor-pointer"/>
+                      <TfiAngleRight className="cursor-pointer text-[10px] md:text-sm"/>
                     </button>
                   </div>
                 </div>
@@ -514,6 +515,8 @@ export default function Users() {
             </tr>
           </tfoot>
         </table>
+
+        </div>
       </div>
 
       {/* View Users Details Modal */}
