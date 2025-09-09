@@ -92,7 +92,7 @@
 
 .ps-sidebar-container {
     background-color: transparent !important;
-    /* height: 100% !important; */
+    height: fit-content !important;
 }
 
 .css-dip3t8 {
@@ -108,7 +108,6 @@
 
 .ps-sidebar-root{
     min-height: 100% !important;
-    /* height: 100vh !important; */
 }
 
 .header {
@@ -143,4 +142,43 @@ html,body{
 .ReactModal__Content{
     width: 50% ;
     padding: 20px 50px !important;
+}
+
+@media (max-width: 1100px) {
+  table thead {
+    display: none; /* hide headers */
+  }
+
+  table tbody tr {
+    display: block;
+    margin-bottom: 15px;
+    border: 3px solid #f3f3f3;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #fff;
+  }
+
+  table tbody tr:hover {
+    background-color: #f3f3f3;
+  }
+
+  table tbody tr .table-data {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    margin-bottom: 10px;
+    box-shadow: none;
+    
+}
+  table tbody tr .table-data::before {
+    content: attr(data-label);
+    font-weight: bold;
+    /* margin-right: 10px; */
+  }
+
+  table tbody tr td[colspan] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
