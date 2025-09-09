@@ -12,10 +12,13 @@ import { Link } from "react-router-dom";
 import { TfiAngleLeft, TfiAngleRight } from "react-icons/tfi";
 import { IoIosArrowDown } from "react-icons/io";
 import noData from "../../../assets/Images/no-data.jpg";
+import DeleteConfirmation from "../../shared/components/DeleteConfirmation/DeleteConfirmation";
+import { toast } from "react-toastify";
 
 const Projects = () => {
   let [projects, setProjects] = useState<ProjectTypes[]>([]);
   const [loading, setLoading] = useState(false);
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
 
   let [actionsOpen, setActionsOpen] = useState(false);
   let [rowIdx, setRowIdx] = useState<number>();
@@ -41,7 +44,17 @@ const Projects = () => {
     }
     setLoading(false);
   };
-
+  const deleteProject = async (id: number) => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.delete(PROJECTS_URLS.DELETE_PROJECTS(id));
+      toast.success(response.data.message || "Project deleted successfully");
+      getProjects();
+     } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Try Again");
+    }
+    setLoading(false);
+  };
   useEffect(() => {
     getProjects();
   }, [pageSize, page]);
@@ -203,9 +216,19 @@ const Projects = () => {
                           <div className="w-full flex items-center gap-2 !px-2 !py-0.5 text-sm hover:bg-[#F8F9FB] cursor-pointer">
                             <button className="flex w-full items-center gap-2 rounded-lg !px-2 !py-2 hover:bg-slate-50 cursor-pointer">
                               <FiTrash2 className=" text-emerald-600" />{" "}
-                              <span>Delete</span>
+                              <span   onClick={() => {
+                                  setDeleteConfirmationOpen(true);
+                                }}>Delete</span>
                             </button>
                           </div>
+                            <DeleteConfirmation
+                              isOpen={deleteConfirmationOpen}
+                              onClose={() => setDeleteConfirmationOpen(false)}
+                              onDelete={() => {
+                                deleteProject(project.id);
+                                setDeleteConfirmationOpen(false);
+                              }}
+                            />
                         </div>
                       )}
                     </td>
