@@ -18,7 +18,8 @@ import { toast } from "react-toastify";
 const Projects = () => {
   let [projects, setProjects] = useState<ProjectTypes[]>([]);
   const [loading, setLoading] = useState(false);
-  
+
+  const [titleValue, setTitleValue] = useState("");
 
   let [actionsOpen, setActionsOpen] = useState(false);
   let [rowIdx, setRowIdx] = useState<number>();
@@ -38,12 +39,19 @@ const Projects = () => {
     setTargetName(name);
     setIsDeleteOpen(true);
   };
-
+  const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitleValue(e.target.value);
+    setPage(1); // نرجع لأول صفحة لما بنفلتر
+  };
   let getProjects = async () => {
     try {
       setLoading(true);
       let response = await axiosInstance.get(PROJECTS_URLS.GET_ALL_PROJECTS, {
-        params: { pageSize, pageNumber: page },
+        params: {
+          pageSize,
+          pageNumber: page,
+          title: titleValue.trim() || undefined,
+        },
       });
       setProjects(response.data.data);
       setTotalNumberOfPages(response.data.totalNumberOfPages);
@@ -59,8 +67,8 @@ const Projects = () => {
     try {
       await axiosInstance.delete(PROJECTS_URLS.DELETE_PROJECTS(targetId));
       toast.success("Project deleted successfully");
-      setProjects(prev => prev.filter(p => p.id !== targetId));
-      getProjects()
+      setProjects((prev) => prev.filter((p) => p.id !== targetId));
+      getProjects();
     } catch (error: any) {
       toast.error(error?.response?.data?.message || "Try Again");
     } finally {
@@ -71,7 +79,7 @@ const Projects = () => {
   };
   useEffect(() => {
     getProjects();
-  }, [pageSize, page]);
+  }, [pageSize, page, titleValue]);
   return (
     <>
       <div className="bg-white !py-5 !px-8 text-3xl flex justify-between ">
@@ -94,6 +102,8 @@ const Projects = () => {
               id="price"
               type="text"
               name="price"
+              value={titleValue}
+              onChange={onTitleChange}
               placeholder="Search By Title"
               className="min-w-0 grow py-1.5 pr-3 pl-1 text-base placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
             />
@@ -207,7 +217,6 @@ const Projects = () => {
                       {actionsOpen && rowIdx == project?.id && (
                         <div className="absolute right-12 top-[70%] w-48 origin-top-right bg-white !py-3 shadow-lg border-1 border-gray-100 ring-opacity-5 z-10 rounded-2xl">
                           <div className="w-full flex items-center gap-2 !px-2 !py-0.5 text-sm hover:bg-[#F8F9FB] cursor-pointer">
-                          
                             <button className="flex w-full items-center gap-2 rounded-lg !px-2 !py-2  hover:bg-slate-100  cursor-pointer">
                               <FiEye className=" text-emerald-600" />
                               <Link
@@ -230,24 +239,27 @@ const Projects = () => {
                           <div className="w-full flex items-center gap-2 !px-2 !py-0.5 text-sm hover:bg-[#F8F9FB] cursor-pointer">
                             <button className="flex w-full items-center gap-2 rounded-lg !px-2 !py-2 hover:bg-slate-50 cursor-pointer">
                               <FiTrash2 className=" text-emerald-600" />{" "}
-                              <span   
-                                     onClick={() => openDeleteProject(project.id, project.title)}
-                                >Delete</span>
+                              <span
+                                onClick={() =>
+                                  openDeleteProject(project.id, project.title)
+                                }
+                              >
+                                Delete
+                              </span>
                             </button>
                           </div>
-                           
                         </div>
                       )}
                     </td>
                   </tr>
                 ))}
-                   <DeleteConfirmation
-        isOpen={isDeleteOpen}
-        onClose={() => setIsDeleteOpen(false)}
-        onDelete={handleConfirmDelete}
-        entity="project"
-        name={targetName}
-      />
+                <DeleteConfirmation
+                  isOpen={isDeleteOpen}
+                  onClose={() => setIsDeleteOpen(false)}
+                  onDelete={handleConfirmDelete}
+                  entity="project"
+                  name={targetName}
+                />
               </>
             )}
           </tbody>
