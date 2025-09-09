@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import { REQUIRED_VALIDATION } from "../../../util/validations";
 import loading from "../../../assets/Images/dataLoading.gif";
 import { useEffect, useMemo, useState } from "react";
-
 const ProjectsData = () => {
   type Mode = "add" | "view" | "edit";
   const navigate = useNavigate();

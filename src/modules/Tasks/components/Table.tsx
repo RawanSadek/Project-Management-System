@@ -19,7 +19,7 @@ const statusColors: Record<string, string> = {
 };
 
 const Table = () => {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] =useState<TasksTypesForManager[]>([]);
   const [loading, setLoading] = useState(false);
   const [actionsOpen, setActionsOpen] = useState(false);
   const [rowIdx, setRowIdx] = useState<number>();
@@ -28,7 +28,15 @@ const Table = () => {
   const [totalResults, setTotalResults] = useState(1);
   const totalPages = totalResults;
   const pageSizes = [5, 10, 20, 50];
-  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [targetId, setTargetId] = useState<number | null>(null);
+  const [targetName, setTargetName] = useState<string>("");
+
+  const openDeleteProject = (id: number, name: string) => {
+    setTargetId(id);
+    setTargetName(name);
+    setIsDeleteOpen(true);
+  };
   const navigate = useNavigate();
 
   const getTasks = async () => {
@@ -46,15 +54,23 @@ const Table = () => {
     }
     setLoading(false);
   };
-  const deleteTasks = async (id: number) => {
+  const deleteTasks = async () => {
+    if (targetId == null) return;
     try {
       setLoading(true);
-      const response = await axiosInstance.delete(TASKS_URLS.DELETE_TASKS(id));
+      const response = await axiosInstance.delete(
+        TASKS_URLS.DELETE_TASKS(targetId)
+      );
       toast.success(response.data.message || "Task deleted successfully");
+      setTasks((prev) => prev.filter((p) => p.id !== targetId));
       getTasks();
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
       toast.error(error?.response?.data?.message);
+    } finally {
+      setIsDeleteOpen(false);
+      setTargetId(null);
+      setTargetName("");
     }
     setLoading(false);
   };
@@ -159,20 +175,19 @@ const Table = () => {
                             <div className="w-full flex items-center gap-2 !px-4 !py-2 text-sm hover:bg-[#F8F9FB] cursor-pointer">
                               <MdDelete className="text-lg text-[#0E382F]" />
                               <span
-                                onClick={() => {
-                                  setDeleteConfirmationOpen(true);
-                                }}
+                                onClick={() =>
+                                  openDeleteProject(task.id, task.title)
+                                }
                               >
                                 Delete
                               </span>
                             </div>
                             <DeleteConfirmation
-                              isOpen={deleteConfirmationOpen}
-                              onClose={() => setDeleteConfirmationOpen(false)}
-                              onDelete={() => {
-                                deleteTasks(task.id);
-                                setDeleteConfirmationOpen(false);
-                              }}
+                              isOpen={isDeleteOpen}
+                              onClose={() => setIsDeleteOpen(false)}
+                              onDelete={deleteTasks}
+                              entity="task"
+                              name={targetName}
                             />
                           </div>
                         )}

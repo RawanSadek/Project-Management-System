@@ -18,7 +18,7 @@ import { toast } from "react-toastify";
 const Projects = () => {
   let [projects, setProjects] = useState<ProjectTypes[]>([]);
   const [loading, setLoading] = useState(false);
-  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+  
 
   let [actionsOpen, setActionsOpen] = useState(false);
   let [rowIdx, setRowIdx] = useState<number>();
@@ -28,6 +28,16 @@ const Projects = () => {
   const [totalNumberOfRecords, setTotalNumberOfRecords] = useState(1);
   const totalPages = totalNumberOfPages;
   const pageSizes = [5, 8, 10, 12, 20];
+
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [targetId, setTargetId] = useState<number | null>(null);
+  const [targetName, setTargetName] = useState<string>("");
+
+  const openDeleteProject = (id: number, name: string) => {
+    setTargetId(id);
+    setTargetName(name);
+    setIsDeleteOpen(true);
+  };
 
   let getProjects = async () => {
     try {
@@ -44,16 +54,20 @@ const Projects = () => {
     }
     setLoading(false);
   };
-  const deleteProject = async (id: number) => {
+  const handleConfirmDelete = async () => {
+    if (targetId == null) return;
     try {
-      setLoading(true);
-      const response = await axiosInstance.delete(PROJECTS_URLS.DELETE_PROJECTS(id));
-      toast.success(response.data.message || "Project deleted successfully");
-      getProjects();
-     } catch (error: any) {
+      await axiosInstance.delete(PROJECTS_URLS.DELETE_PROJECTS(targetId));
+      toast.success("Project deleted successfully");
+      setProjects(prev => prev.filter(p => p.id !== targetId));
+      getProjects()
+    } catch (error: any) {
       toast.error(error?.response?.data?.message || "Try Again");
+    } finally {
+      setIsDeleteOpen(false);
+      setTargetId(null);
+      setTargetName("");
     }
-    setLoading(false);
   };
   useEffect(() => {
     getProjects();
@@ -216,24 +230,24 @@ const Projects = () => {
                           <div className="w-full flex items-center gap-2 !px-2 !py-0.5 text-sm hover:bg-[#F8F9FB] cursor-pointer">
                             <button className="flex w-full items-center gap-2 rounded-lg !px-2 !py-2 hover:bg-slate-50 cursor-pointer">
                               <FiTrash2 className=" text-emerald-600" />{" "}
-                              <span   onClick={() => {
-                                  setDeleteConfirmationOpen(true);
-                                }}>Delete</span>
+                              <span   
+                                     onClick={() => openDeleteProject(project.id, project.title)}
+                                >Delete</span>
                             </button>
                           </div>
-                            <DeleteConfirmation
-                              isOpen={deleteConfirmationOpen}
-                              onClose={() => setDeleteConfirmationOpen(false)}
-                              onDelete={() => {
-                                deleteProject(project.id);
-                                setDeleteConfirmationOpen(false);
-                              }}
-                            />
+                           
                         </div>
                       )}
                     </td>
                   </tr>
                 ))}
+                   <DeleteConfirmation
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+        onDelete={handleConfirmDelete}
+        entity="project"
+        name={targetName}
+      />
               </>
             )}
           </tbody>
