@@ -29,7 +29,7 @@ export default function Navbar() {
           <div className="hidden sm:flex items-center justify-between gap-5">
             <FaBell className="text-xl text-[#EF9B28] cursor-pointer" />
 
-            <div className="flex justify-between items-center gap-2 border-s border-gray-400 !px-7 cursor-pointer">
+            <div onClick={() => setProfileOpen(!profileOpen)} className="flex justify-between items-center gap-2 border-s border-gray-400 !px-7 cursor-pointer">
               <img src={loginData?.profilePicture ? loginData?.profilePicture : noPP} alt="pp" className="size-8 rounded-full bg-gray-800 outline -outline-offset-1 outline-white/10" />
 
               <div className="flex justify-between items-center gap-5">
@@ -38,7 +38,7 @@ export default function Navbar() {
                   <small className="text-gray-400">{loginData?.userEmail}</small>
                 </div>
 
-                {profileOpen ? <IoIosArrowUp onClick={() => setProfileOpen(!profileOpen)} className="text-gray-400 text-xl" /> : <IoIosArrowDown onClick={() => setProfileOpen(!profileOpen)} className="text-gray-400 text-xl" />}
+                {profileOpen ? <IoIosArrowUp className="text-gray-400 text-xl" /> : <IoIosArrowDown className="text-gray-400 text-xl" />}
               </div>
             </div>
 
