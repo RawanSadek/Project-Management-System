@@ -21,24 +21,21 @@ const VerifyAccount = () => {
   const onSubmit = async (data: VerifyAccountTypes) => {
     try {
       const response = await axiosInstance.put(USERS_URLS.VERIFYACCOUNT, data);
-      console.log(response);
 
-      toast.success(`Account verified successfully!`);
+      toast.success(response.data.message);
       navigate("/login");
     } catch (error: any) {
-      toast.error(error?.message);
+      toast.error(error?.response?.data?.message);
     }
   };
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="w-full max-w-md rounded-2xl  mx-auto p-6 sm:p-10 relative flex flex-col gap-7 auth-form"
+      className="w-full max-w-md rounded-2xl  mx-auto p-6 sm:p-10 relative flex flex-col gap-7 auth-form "
     >
-      <div className="text-white text-sm">welcome to PMS</div>
-      <h2 className="text-2xl sm:text-3xl font-bold text-[#FFA726] mb-6 sm:mb-8 self-start ">
-        Verify Account
-      </h2>
+      <h2 className="form-title"> Verify Account</h2>
+
       <div className="w-full mb-4 sm:mb-6">
         <label className="text-[#FFA726] text-sm">E-mail</label>
         <input

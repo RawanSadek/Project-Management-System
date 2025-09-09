@@ -1,4 +1,3 @@
-import type { JwtPayload } from "jwt-decode";
 import type { ReactNode } from "react";
 
 export interface loginDataTypes {
@@ -7,7 +6,7 @@ export interface loginDataTypes {
 }
 
 export interface AuthContextType {
-  loginData: JwtPayload | null;
+  loginData: loginDataTypes | null;
   getLoginData: () => void;
   logout: () => void;
 }
@@ -34,3 +33,96 @@ export interface VerifyAccountTypes {
   email: string;
   code: string;
 }
+export interface resetPassDataTypes {
+  email: string;
+  seed: string;
+  password: string;
+  confirmPassword: string;
+}
+export interface forgetPassDataTypes {
+  email: string;
+}
+
+export interface loginDataTypes {
+  exp: number;
+  iat: number;
+  roles: string[];
+  userEmail: string;
+  userGroup: string;
+  userId: number;
+  userName: string;
+  profilePicture?: string;
+}
+
+export interface UserTypes {
+  id: number;
+  country: string;
+  creationDate: string;
+  email: string;
+  imagePath: string;
+  modificationDate: string;
+  phoneNumber: string;
+  userName: string;
+  isActivated: boolean;
+  group: { 
+    id: number,
+    name: string,
+    creationDate: string,
+    modificationDate: string
+  }
+}
+
+export interface UsersCountTypes{
+  activatedEmployeeCount: number,
+  deactivatedEmployeeCount: number
+}
+
+export interface ProjectTypes {
+ id: number;
+title: string;
+isVerified:boolean;
+isActivated: boolean;
+description: string;
+creationDate: string;
+modificationDate: string;
+}
+
+export interface FormDataProject { 
+  id?:number;
+title: string;
+description: string;
+}
+
+export interface TasksTypesForManager {
+  id: number;
+  title: string;
+  description: string;
+  status: string;
+  employee: {
+    id: number;
+    userName: string;
+  };
+  project: {
+    id: number;
+    title: string;
+  };
+  creationDate: string;
+}
+export interface TaskFormProps {
+  mode: "add" | "edit" | "view";
+  task?: {
+    id?: number;
+    title: string;
+    description: string;
+    employeeId: number;
+    projectId: number;
+  };
+  onSuccess?: () => void;
+}
+export interface TaskEditForm {
+  title: string;
+  description: string;
+  employeeId: number;
+  projectId: number;
+}
+
