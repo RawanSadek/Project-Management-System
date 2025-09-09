@@ -126,3 +126,9 @@ export interface TaskEditForm {
   projectId: number;
 }
 
+export interface TasksCount {
+  toDo: number;
+  inProgress: number;
+  done: number;
+}
+

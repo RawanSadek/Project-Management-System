@@ -27,7 +27,7 @@ export default function ManagerDashboard() {
   }, []);
 
   return (
-    <div className="bg-white w-full lg:w-1/2 !py-5 rounded-xl shadow-s">
+    <div className="bg-white w-full !py-5 rounded-xl shadow-s">
       <div className="!px-5 border-l-4 border-[#EF9B28]">
         <h4 className="font-semibold">Tasks</h4>
         <p className="text-gray-500">
