@@ -3,7 +3,7 @@ import { GoSearch } from "react-icons/go";
 import { RiExpandUpDownLine } from "react-icons/ri";
 import dataLoading from "../../../assets/Images/dataLoading.gif";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import type { ProjectTypes } from "../../../types/types";
 
 import { HiDotsVertical } from "react-icons/hi";
@@ -15,6 +15,7 @@ import noData from "../../../assets/Images/no-data.jpg";
 import DeleteConfirmation from "../../shared/components/DeleteConfirmation/DeleteConfirmation";
 import { toast } from "react-toastify";
 import type { AxiosError } from "axios";
+import { AuthContext } from "../../../Contexts/AuthContext/AuthContext";
 
 const Projects = () => {
   const [projects, setProjects] = useState<ProjectTypes[]>([]);
@@ -34,7 +35,7 @@ const Projects = () => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [targetId, setTargetId] = useState<number | null>(null);
   const [targetName, setTargetName] = useState<string>("");
-
+  const { loginData } = useContext(AuthContext);
   const openDeleteProject = (id: number, name: string) => {
     setTargetId(id);
     setTargetName(name);
@@ -42,21 +43,32 @@ const Projects = () => {
   };
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitleValue(e.target.value);
-    setPage(1); // نرجع لأول صفحة لما بنفلتر
+    setPage(1);
   };
+  const canManage = useMemo(
+    () => loginData?.userGroup === "Manager",
+    [loginData?.userGroup]
+  );
   const getProjects = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get(PROJECTS_URLS.GET_ALL_PROJECTS, {
-        params: {
-          pageSize,
-          pageNumber: page,
-          title: titleValue.trim() || undefined,
-        },
-      });
-      setProjects(response.data.data);
-      setTotalNumberOfPages(response.data.totalNumberOfPages);
-      setTotalNumberOfRecords(response.data.totalNumberOfRecords);
+      const endpoint = canManage
+        ? PROJECTS_URLS.GET_ALL_PROJECTS
+        : PROJECTS_URLS.GET_EMPLOYEE_PROJECTS;
+
+      const params = {
+        pageSize,
+        pageNumber: page,
+        title: titleValue.trim() || undefined,
+      };
+
+      const { data } = await axiosInstance.get(endpoint, { params });
+
+      const list: ProjectTypes[] = data?.data ?? [];
+      setProjects(list);
+      setProjects(data.data);
+      setTotalNumberOfPages(data.totalNumberOfPages);
+      setTotalNumberOfRecords(data.totalNumberOfRecords);
     } catch (error) {
       console.log(error);
     }
@@ -80,19 +92,22 @@ const Projects = () => {
   };
   useEffect(() => {
     getProjects();
-  }, [pageSize, page, titleValue]);
+  }, [pageSize, page, titleValue, canManage]);
   return (
     <>
       <div className="bg-white !py-5 !px-8 text-3xl flex justify-between ">
         <h2>Projects</h2>
-        <button
-          className="inline-flex items-center gap-2.5 rounded-full bg-amber-500  !px-5 !py-3
+        {canManage && (
+          <Link
+            to="/dashboard/project-data"
+            className="inline-flex items-center gap-2.5 rounded-full bg-amber-500  !px-5 !py-3
                text-white text-base font-medium shadow-md hover:bg-amber-600
                focus:outline-none focus:ring-2 focus:ring-amber-300 active:translate-y-px cursor-pointer"
-        >
-          <FiPlus />
-          <Link to={"/dashboard/Project-data"}>Add New Project</Link>
-        </button>
+          >
+            <FiPlus />
+            Add New Project
+          </Link>
+        )}
       </div>
       <div className="bg-white !my-5 !mx-8 text-3xl rounded-lg">
         {/* Search Container */}
@@ -189,13 +204,13 @@ const Projects = () => {
                         {project?.title}
                       </td>
                       <td data-label="Status:" className="!p-4 table-data ">
-                        {project?.isActivated == true ? (
+                        {project?.isActivated === true ? (
                           <div className="rounded-2xl bg-[#009247] w-fit !py-1 !px-3 text-white font-light">
                             Public
                           </div>
                         ) : (
                           <div className="rounded-2xl bg-[#922E25B2] w-fit !py-1 !px-3 text-white font-light">
-                            In Public
+                            Private
                           </div>
                         )}
                       </td>
@@ -218,50 +233,61 @@ const Projects = () => {
                           "en-GB"
                         )}
                       </td>
+
                       <td className="!p-4 table-data relative">
-                        <HiDotsVertical
-                          onClick={() => {
-                            setActionsOpen(!actionsOpen);
-                            setRowIdx(project?.id);
-                          }}
-                          className="text-xl cursor-pointer"
-                        />
-                        {actionsOpen && rowIdx == project?.id && (
-                          <div className="absolute right-12 top-[70%] w-48 origin-top-right bg-white !py-3 shadow-lg border-1 border-gray-100 ring-opacity-5 z-10 rounded-2xl">
-                            <div className="w-full flex items-center gap-2 !px-2 !py-0.5 text-sm hover:bg-[#F8F9FB] cursor-pointer">
-                              <button className="flex w-full items-center gap-2 rounded-lg !px-2 !py-2  hover:bg-slate-100  cursor-pointer">
-                                <FiEye className=" text-emerald-600" />
-                                <Link
-                                  to={`/dashboard/project-data/${project.id}?mode=view`}
-                                >
-                                  View
-                                </Link>
-                              </button>
-                            </div>
-                            <div className="w-full flex items-center gap-2 !px-2 !py-0.5 text-sm hover:bg-[#F8F9FB] cursor-pointer">
-                              <button className="flex w-full items-center gap-2 rounded-lg !px-2 !py-2 hover:bg-slate-50">
-                                <FiEdit2 className=" text-emerald-600" />
-                                <Link
-                                  to={`/dashboard/project-data/${project.id}?mode=edit`}
-                                >
-                                  Edit
-                                </Link>
-                              </button>
-                            </div>
-                            <div className="w-full flex items-center gap-2 !px-2 !py-0.5 text-sm hover:bg-[#F8F9FB] cursor-pointer">
-                              <button className="flex w-full items-center gap-2 rounded-lg !px-2 !py-2 hover:bg-slate-50 cursor-pointer">
-                                <FiTrash2 className=" text-emerald-600" />{" "}
-                                <span
-                                  onClick={() =>
-                                    openDeleteProject(project.id, project.title)
-                                  }
-                                >
-                                  Delete
-                                </span>
-                              </button>
-                            </div>
-                          </div>
-                        )}
+                        <td className="!p-4 table-data relative">
+                          {canManage && (
+                            <>
+                              <HiDotsVertical
+                                onClick={() => {
+                                  setActionsOpen(!actionsOpen);
+                                  setRowIdx(project.id);
+                                }}
+                                className="text-xl cursor-pointer"
+                              />
+
+                              {actionsOpen && rowIdx === project.id && (
+                                <div className="absolute right-12 top-[70%] w-48 origin-top-right bg-white !py-3 shadow-lg border-1 border-gray-100 ring-opacity-5 z-10 rounded-2xl">
+                                  <div className="w-full flex items-center gap-2 !px-2 !py-0.5 text-sm hover:bg-[#F8F9FB] cursor-pointer">
+                                    <button className="flex w-full items-center gap-2 rounded-lg !px-2 !py-2 hover:bg-slate-100">
+                                      <FiEye className="text-emerald-600" />
+                                      <Link
+                                        to={`/dashboard/project-data/${project.id}?mode=view`}
+                                      >
+                                        View
+                                      </Link>
+                                    </button>
+                                  </div>
+                                  <div className="w-full flex items-center gap-2 !px-2 !py-0.5 text-sm hover:bg-[#F8F9FB] cursor-pointer">
+                                    <button className="flex w-full items-center gap-2 rounded-lg !px-2 !py-2 hover:bg-slate-50">
+                                      <FiEdit2 className="text-emerald-600" />
+                                      <Link
+                                        to={`/dashboard/project-data/${project.id}?mode=edit`}
+                                      >
+                                        Edit
+                                      </Link>
+                                    </button>
+                                  </div>
+                                  <div className="w-full flex items-center gap-2 !px-2 !py-0.5 text-sm hover:bg-[#F8F9FB] cursor-pointer">
+                                    <button className="flex w-full items-center gap-2 rounded-lg !px-2 !py-2 hover:bg-slate-50">
+                                      <FiTrash2 className="text-emerald-600" />
+                                      <span
+                                        onClick={() =>
+                                          openDeleteProject(
+                                            project.id,
+                                            project.title
+                                          )
+                                        }
+                                      >
+                                        Delete
+                                      </span>
+                                    </button>
+                                  </div>
+                                </div>
+                              )}
+                            </>
+                          )}
+                        </td>
                       </td>
                     </tr>
                   ))}

@@ -5,7 +5,6 @@ import type { FormDataProject } from "../../../types/types";
 import { axiosInstance, PROJECTS_URLS } from "../../../util/axios";
 import { toast } from "react-toastify";
 import { REQUIRED_VALIDATION } from "../../../util/validations";
-import loading from "../../../assets/Images/dataLoading.gif";
 import { useEffect, useMemo, useState } from "react";
 const ProjectsData = () => {
   type Mode = "add" | "view" | "edit";
@@ -55,7 +54,6 @@ const ProjectsData = () => {
         );
         toast.success(response.data?.message || "Updated Successfully");
       } else {
-        // view mode: رجوع فقط
         navigate(-1);
         return;
       }
