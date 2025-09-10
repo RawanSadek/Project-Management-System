@@ -1,61 +1,74 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { FaRegEdit } from "react-icons/fa";
+import { axiosInstance, TASKS_URLS } from "../../../../util/axios";
 
 interface Task {
   id: string;
   title: string;
   description?: string;
-  status: "todo" | "inprogress" | "done";
+  status: "ToDo" | "InProgress" | "Done";
 }
 
 interface Column {
-  id: "todo" | "inprogress" | "done";
+  id: "ToDo" | "InProgress" | "Done";
   title: string;
   taskIds: string[];
 }
 
 const EmployeeTable = () => {
-  const initialTasks: Task[] = [
-    {
-      id: "1",
-      title: "Login UI",
-      description: "Design login interface",
-      status: "todo",
-    },
-    {
-      id: "2",
-      title: "Login Integration",
-      description: "Connect to backend API",
-      status: "todo",
-    },
-    {
-      id: "3",
-      title: "Register UI",
-      description: "Design registration interface",
-      status: "inprogress",
-    },
-    {
-      id: "4",
-      title: "Register Integration",
-      description: "Connect to backend API",
-      status: "todo",
-    },
-    {
-      id: "5",
-      title: "Login UI",
-      description: "Final design implementation",
-      status: "done",
-    },
-  ];
-
-  const initialColumns: Column[] = [
-    { id: "todo", title: "To Do", taskIds: ["1", "2", "4"] },
-    { id: "inprogress", title: "In Progress", taskIds: ["3"] },
-    { id: "done", title: "Done", taskIds: ["5"] },
-  ];
-
-  const [tasks, setTasks] = useState<Task[]>(initialTasks);
-  const [columns, setColumns] = useState<Column[]>(initialColumns);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [columns, setColumns] = useState<Column[]>([
+    { id: "ToDo", title: "To Do", taskIds: [] },
+    { id: "InProgress", title: "In Progress", taskIds: [] },
+    { id: "Done", title: "Done", taskIds: [] },
+  ]);
   const [draggingTaskId, setDraggingTaskId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await axiosInstance.get(
+          TASKS_URLS.GET_PROJECT_TASKS_MANAGER(100, 1)
+        );
+        const apiTasks: Task[] = response.data.data;
+        // Map API data to Task[]
+        const mappedTasks: Task[] = apiTasks.map((t) => ({
+          id: String(t.id),
+          title: t.title,
+          description: t.description,
+          status: t.status as "ToDo" | "InProgress" | "Done",
+        }));
+        setTasks(mappedTasks);
+        // Build columns from tasks
+        setColumns([
+          {
+            id: "ToDo",
+            title: "To Do",
+            taskIds: mappedTasks
+              .filter((task: Task) => task.status === "ToDo")
+              .map((task: Task) => task.id),
+          },
+          {
+            id: "InProgress",
+            title: "In Progress",
+            taskIds: mappedTasks
+              .filter((task: Task) => task.status === "InProgress")
+              .map((task: Task) => task.id),
+          },
+          {
+            id: "Done",
+            title: "Done",
+            taskIds: mappedTasks
+              .filter((task: Task) => task.status === "Done")
+              .map((task: Task) => task.id),
+          },
+        ]);
+      } catch {
+        // handle error
+      }
+    };
+    fetchTasks();
+  }, []);
 
   const handleDragStart = (e: React.DragEvent, taskId: string) => {
     setDraggingTaskId(taskId);
@@ -70,7 +83,7 @@ const EmployeeTable = () => {
 
   const handleDrop = (
     e: React.DragEvent,
-    columnId: "todo" | "inprogress" | "done"
+    columnId: "ToDo" | "InProgress" | "Done"
   ) => {
     e.preventDefault();
     if (!draggingTaskId) return;
@@ -100,35 +113,9 @@ const EmployeeTable = () => {
     setDraggingTaskId(null);
   };
 
-  const getColumnColor = (columnId: string) => {
-    switch (columnId) {
-      case "todo":
-        return "border-red-200 bg-red-50";
-      case "inprogress":
-        return "border-yellow-200 bg-yellow-50";
-      case "done":
-        return "border-green-200 bg-green-50";
-      default:
-        return "border-gray-200 bg-gray-50";
-    }
-  };
-
-  const getTaskColor = (columnId: string) => {
-    switch (columnId) {
-      case "todo":
-        return "border-red-400 hover:border-red-600";
-      case "inprogress":
-        return "border-yellow-400 hover:border-yellow-600";
-      case "done":
-        return "border-green-400 hover:border-green-600";
-      default:
-        return "border-gray-400 hover:border-gray-600";
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+    <div className="min-h-screen bg-[#F7F7F7] p-6">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6 text-left underline cursor-pointer">
         Task Board
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -140,38 +127,31 @@ const EmployeeTable = () => {
           return (
             <div
               key={column.id}
-              className={`rounded-lg border-2 p-4 ${getColumnColor(column.id)}`}
+              className="rounded-xl bg-[#49716B] p-6 min-h-[500px] flex flex-col"
               onDragOver={handleDragOver}
               onDrop={(e) => handleDrop(e, column.id)}
             >
-              <h2 className="text-xl font-semibold mb-4 text-gray-700 flex items-center justify-between">
+              <h2 className="text-2xl font-semibold mb-6 text-gray-100 text-left">
                 {column.title}
-                <span className="text-sm font-medium px-2 py-1 rounded-full bg-white">
-                  {columnTasks.length} tasks
-                </span>
               </h2>
-
-              <div className="space-y-3">
+              <div className="flex-1 flex flex-col gap-4">
                 {columnTasks.map((task) => (
                   <div
                     key={task.id}
                     draggable
                     onDragStart={(e) => handleDragStart(e, task.id)}
-                    className={`p-3 rounded border-l-4 bg-white shadow-sm cursor-grab ${getTaskColor(
-                      column.id
-                    )}`}
+                    className="bg-[#F4A025] rounded-lg px-6 py-4 flex items-center justify-between shadow cursor-grab"
                   >
-                    <h3 className="font-medium text-gray-800">{task.title}</h3>
-                    {task.description && (
-                      <p className="text-sm text-gray-600 mt-1">
-                        {task.description}
-                      </p>
+                    <span className="text-white text-lg font-normal">
+                      {task.title}
+                    </span>
+                    {(column.id === "ToDo" || column.id === "InProgress") && (
+                      <FaRegEdit className="text-white text-xl ml-3" />
                     )}
                   </div>
                 ))}
-
                 {columnTasks.length === 0 && (
-                  <div className="text-center py-4 text-gray-500">
+                  <div className="text-center py-4 text-gray-300">
                     No tasks in this column
                   </div>
                 )}
@@ -179,9 +159,6 @@ const EmployeeTable = () => {
             </div>
           );
         })}
-      </div>
-      <div className="mt-8 text-center text-gray-600">
-        <p>Drag and drop tasks between columns to change their status.</p>
       </div>
     </div>
   );

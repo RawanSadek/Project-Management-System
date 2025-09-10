@@ -112,8 +112,10 @@ const TasksData = () => {
         employeeId: dto?.employee?.id ?? 0,
         projectId: dto?.project?.id ?? 0,
       });
-    } catch (error) {
-      toast.error("Failed to fetch task details.");
+    } catch (error: AxiosError) {
+      toast.error(
+        error.response?.data?.message || "Failed to fetch task details."
+      );
     } finally {
       setLoadingOne(false);
     }
