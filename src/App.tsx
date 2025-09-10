@@ -11,14 +11,14 @@ import MasterLayout from "./modules/shared/components/MasterLayout/MasterLayout"
 import Home from "./modules/Home/components/Home/Home";
 import Projects from "./modules/Projects/components/Projects";
 import ProjectsData from "./modules/Projects/components/ProjectsData";
-import Tasks from "./modules/Tasks/components/Tasks/Tasks";
+import Tasks from "./modules/Tasks/components/TasksView/Tasks";
 import Users from "./modules/Users/components/Users/Users";
 import ChangePassword from "./modules/Auth/components/ChangePassword/ChangePassword";
 import Profile from "./modules/Profile/components/Profile";
 import { ToastContainer } from "react-toastify";
 import { AuthContextProvider } from "./Contexts/AuthContext/AuthContext";
 import ProtectedRouted from "./modules/shared/components/ProtectedRouted/ProtectedRouted";
-import TasksData from "./modules/Tasks/components/Tasks/TasksData";
+import TasksData from "./modules/Tasks/components/ManagerTasks/TasksData";
 
 function App() {
   const routes = createBrowserRouter([
