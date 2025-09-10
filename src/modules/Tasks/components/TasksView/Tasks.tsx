@@ -6,6 +6,7 @@ import EmployeeTable from "../EmployeeTasks/EmployeeTable";
 
 const Tasks = () => {
   const { loginData } = useContext(AuthContext);
+  console.log(loginData);
 
   return (
     <>
@@ -17,7 +18,7 @@ const Tasks = () => {
           </div>
         </div>
       )}
-      {loginData?.roles[0] === "Employee" && (
+      {loginData?.roles[3] === "Employee" && (
         <div className="container mx-auto p-4">
           <EmployeeTable />
         </div>

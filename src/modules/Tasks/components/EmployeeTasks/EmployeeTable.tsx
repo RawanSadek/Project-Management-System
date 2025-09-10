@@ -131,7 +131,6 @@ const EmployeeTable = () => {
       <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
         Task Board
       </h1>
-
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {columns.map((column) => {
           const columnTasks = tasks.filter((task) =>
@@ -181,7 +180,6 @@ const EmployeeTable = () => {
           );
         })}
       </div>
-
       <div className="mt-8 text-center text-gray-600">
         <p>Drag and drop tasks between columns to change their status.</p>
       </div>
