@@ -52,7 +52,7 @@ const TasksData = () => {
       if (mode === "edit" && id) {
         const numericId = Number(id);
         const response = await axiosInstance.put(
-          TASKS_URLS.EDIT_TASKS(numericId),
+          TASKS_URLS.EDIT_TASKS_BY_MANAGER(numericId),
           data
         );
         toast.success(response.data.message || "Task updated successfully!");

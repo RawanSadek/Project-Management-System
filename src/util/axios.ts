@@ -47,6 +47,7 @@ export const TASKS_URLS = {
   GET_EMPLOYEE_TASKS: `/Task`,
   CREATE_TASKS: `/Task`,
   DELETE_TASKS: (id: number) => `/Task/${id}`,
-  EDIT_TASKS: (id: number) => `/Task/${id}`,
+  EDIT_TASKS_BY_MANAGER: (id: number) => `/Task/${id}`,
+  EDIT_TASKS_BY_EMPLOYEE: (id: number) => `/Task/${id}/change-status`,
   GET_TASKS_DETAILS: (id: number) => `/Task/${id}`,
 };
