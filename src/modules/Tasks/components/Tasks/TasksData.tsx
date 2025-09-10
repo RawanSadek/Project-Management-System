@@ -109,8 +109,8 @@ const TasksData = () => {
       reset({
         title: dto?.title ?? "",
         description: dto?.description ?? "",
-        employeeId: dto?.user?.name ?? 0,
-        projectId: dto?.project?.title ?? 0,
+        employeeId: dto?.employee?.id ?? 0,
+        projectId: dto?.project?.id ?? 0,
       });
     } catch (error) {
       toast.error("Failed to fetch task details.");
@@ -183,6 +183,7 @@ const TasksData = () => {
                     })}
                     className="!w-full rounded-xl border border-gray-300 !px-10 !py-3 text-gray-700 focus:outline-none focus:border-[#315951] bg-[#F7F7F7]"
                     defaultValue={watch("employeeId") || ""}
+                    disabled={isReadOnly}
                   >
                     <option value="">No Users Selected</option>
                     {users.map((user) => (
@@ -208,6 +209,7 @@ const TasksData = () => {
                     })}
                     className="!w-full rounded-xl border border-gray-300 !px-10 !py-3 text-gray-700 focus:outline-none focus:border-[#315951] bg-[#F7F7F7]"
                     defaultValue={watch("projectId") || ""}
+                    disabled={isReadOnly}
                   >
                     <option value="">No projects Selected</option>
                     {projects.map((project) => (
@@ -226,6 +228,7 @@ const TasksData = () => {
             </div>
             <div className="flex justify-between items-center !mt-8">
               <button
+                type="button"
                 className="cursor-pointer  border border-[#315951] text-[#315951] rounded-full !px-8 !py-3 font-semibold hover:bg-[#F7F7F7]"
                 onClick={() => window.history.back()}
               >
