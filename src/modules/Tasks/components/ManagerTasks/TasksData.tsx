@@ -80,7 +80,6 @@ const TasksData = () => {
     try {
       const response = await axiosInstance.get(USERS_URLS.GETUSERS);
       setUsers(response.data.data);
-      console.log(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -89,7 +88,6 @@ const TasksData = () => {
     try {
       const response = await axiosInstance.get(PROJECTS_URLS.GET_ALL_PROJECTS);
       setProjects(response.data.data);
-      console.log(response.data.data);
     } catch (error) {
       console.log(error);
     }

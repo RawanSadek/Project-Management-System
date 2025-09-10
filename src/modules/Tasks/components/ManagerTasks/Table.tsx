@@ -50,7 +50,6 @@ const Table = () => {
       setTasks(response.data.data);
       setTotalResults(response.data.totalNumberOfPages);
       setTotalNumberOfRecords(response.data.totalNumberOfRecords);
-      console.log(response.data.totalNumberOfRecords);
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
       toast.error(error?.response?.data?.message);

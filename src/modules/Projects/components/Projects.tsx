@@ -57,7 +57,6 @@ const Projects = () => {
       setProjects(response.data.data);
       setTotalNumberOfPages(response.data.totalNumberOfPages);
       setTotalNumberOfRecords(response.data.totalNumberOfRecords);
-      console.log(response.data.data);
     } catch (error) {
       console.log(error);
     }
