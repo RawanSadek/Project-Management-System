@@ -52,7 +52,7 @@ const TasksData = () => {
       if (mode === "edit" && id) {
         const numericId = Number(id);
         const response = await axiosInstance.put(
-          TASKS_URLS.EDIT_TASKS(numericId),
+          TASKS_URLS.EDIT_TASKS_BY_MANAGER(numericId),
           data
         );
         toast.success(response.data.message || "Task updated successfully!");
@@ -112,8 +112,10 @@ const TasksData = () => {
         employeeId: dto?.employee?.id ?? 0,
         projectId: dto?.project?.id ?? 0,
       });
-    } catch (error) {
-      toast.error("Failed to fetch task details.");
+    } catch (error: AxiosError) {
+      toast.error(
+        error.response?.data?.message || "Failed to fetch task details."
+      );
     } finally {
       setLoadingOne(false);
     }

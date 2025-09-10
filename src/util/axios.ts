@@ -29,7 +29,7 @@ export const USERS_URLS = {
   GETUSERS: `/Users`,
   GET_USERS_COUNT: `/Users/count`,
   TOGGLE_USER: (id: number) => `/Users/${id}`,
-  GET_USER_DETAILS : (id: number) => `/Users/${id}` ,
+  GET_USER_DETAILS: (id: number) => `/Users/${id}`,
 };
 // PROJECTS_URLS
 export const PROJECTS_URLS = {
@@ -44,8 +44,10 @@ export const TASKS_URLS = {
   GET_PROJECT_TASKS_MANAGER: (pageSize: number, page: number) =>
     `/Task/manager?pageSize=${pageSize}&pageNumber=${page}`,
   GET_TASKS_COUNT: `/Task/count`,
+  GET_EMPLOYEE_TASKS: `/Task`,
   CREATE_TASKS: `/Task`,
   DELETE_TASKS: (id: number) => `/Task/${id}`,
-  EDIT_TASKS: (id: number) => `/Task/${id}`,
+  EDIT_TASKS_BY_MANAGER: (id: number) => `/Task/${id}`,
+  EDIT_TASKS_BY_EMPLOYEE: (id: number) => `/Task/${id}/change-status`,
   GET_TASKS_DETAILS: (id: number) => `/Task/${id}`,
 };

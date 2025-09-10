@@ -6,7 +6,6 @@ import EmployeeTable from "../EmployeeTasks/EmployeeTable";
 
 const Tasks = () => {
   const { loginData } = useContext(AuthContext);
-  console.log(loginData);
 
   return (
     <>
