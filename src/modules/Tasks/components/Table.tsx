@@ -10,7 +10,7 @@ import { GoSearch } from "react-icons/go";
 import { toast } from "react-toastify";
 import DeleteConfirmation from "./../../shared/components/DeleteConfirmation/DeleteConfirmation";
 import noData from "../../../assets/Images/no-data.jpg";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import type { AxiosError } from "axios";
 import { IoIosArrowDown } from "react-icons/io";
 import { TfiAngleLeft, TfiAngleRight } from "react-icons/tfi";
@@ -40,7 +40,6 @@ const Table = () => {
     setTargetName(name);
     setIsDeleteOpen(true);
   };
-  const navigate = useNavigate();
 
   const getTasks = async () => {
     try {
@@ -171,22 +170,23 @@ const Table = () => {
                         />
                         {actionsOpen && rowIdx == task.id && (
                           <div className="absolute right-12 top-[70%] w-48 origin-top-right bg-white !py-3 shadow-lg border-1 border-gray-100 ring-opacity-5 z-50 rounded-2xl">
-                            <div className="w-full flex items-center gap-2 !px-4 !py-2 text-sm hover:bg-[#F8F9FB] cursor-pointer">
-                              <ImEye className="text-lg text-[#0E382F]" />
-                              View
-                            </div>
-                            <div className="w-full flex items-center gap-2 !px-4 !py-2 text-sm hover:bg-[#F8F9FB] cursor-pointer">
-                              <MdEdit className="text-lg text-[#0E382F]" />
-                              <span
-                                onClick={() =>
-                                  navigate(`/dashboard/tasks-data`, {
-                                    state: { task },
-                                  })
-                                }
-                              >
+                            <Link
+                              to={`/dashboard/tasks-data/${task.id}?mode=view`}
+                            >
+                              <div className="w-full flex items-center gap-2 !px-4 !py-2 text-sm hover:bg-[#F8F9FB] cursor-pointer">
+                                <ImEye className="text-lg text-[#0E382F]" />
+                                View
+                              </div>
+                            </Link>
+                            <Link
+                              to={`/dashboard/tasks-data/${task.id}?mode=edit`}
+                            >
+                              <div className="w-full flex items-center gap-2 !px-4 !py-2 text-sm hover:bg-[#F8F9FB] cursor-pointer">
+                                <MdEdit className="text-lg text-[#0E382F]" />
                                 Edit
-                              </span>
-                            </div>
+                              </div>
+                            </Link>
+
                             <div className="w-full flex items-center gap-2 !px-4 !py-2 text-sm hover:bg-[#F8F9FB] cursor-pointer">
                               <MdDelete className="text-lg text-[#0E382F]" />
                               <span
