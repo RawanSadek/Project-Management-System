@@ -44,7 +44,7 @@ export const TASKS_URLS = {
   GET_PROJECT_TASKS_MANAGER: (pageSize: number, page: number) =>
     `/Task/manager?pageSize=${pageSize}&pageNumber=${page}`,
   GET_TASKS_COUNT: `/Task/count`,
-  GET_EMPLOYEE_TASKS: `/Task`,
+  GET_EMPLOYEE_TASKS: `/Task?pageSize=50&pageNumber=1`,
   CREATE_TASKS: `/Task`,
   DELETE_TASKS: (id: number) => `/Task/${id}`,
   EDIT_TASKS_BY_MANAGER: (id: number) => `/Task/${id}`,
