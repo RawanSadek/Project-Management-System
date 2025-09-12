@@ -86,7 +86,9 @@ const TasksData = () => {
   };
   const getProjects = async () => {
     try {
-      const response = await axiosInstance.get(PROJECTS_URLS.GET_ALL_PROJECTS);
+      const response = await axiosInstance.get(
+        PROJECTS_URLS.GET_MANAGER_PROJECTS
+      );
       setProjects(response.data.data);
     } catch (error) {
       console.log(error);

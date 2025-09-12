@@ -34,6 +34,7 @@ export const USERS_URLS = {
 // PROJECTS_URLS
 export const PROJECTS_URLS = {
   GET_ALL_PROJECTS: `/Project`,
+  GET_MANAGER_PROJECTS: `/Project/manager`,
   GET_EMPLOYEE_PROJECTS: `/Project/employee`,
   CREATE_PROJECTS: `/Project`,
   DELETE_PROJECTS: (id: number) => `/Project/${id}`,
