@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import { AuthContext } from "../../../../Contexts/AuthContext/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
@@ -15,7 +14,6 @@ import type { resetPassDataTypes } from "../../../../types/types";
 import loading from "../../../../assets/Images/loading.gif";
 
 const ResetPassword = () => {
-  const { getLoginData } = useContext(AuthContext);
   const { state } = useLocation();
   const navigate = useNavigate();
   const defaultEmail = typeof state === "string" ? state : state?.email ?? "";

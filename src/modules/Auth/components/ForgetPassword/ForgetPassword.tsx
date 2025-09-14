@@ -1,9 +1,5 @@
-// import loading from '../../../../assets/Images/loading.gif';
-
 import { useForm } from "react-hook-form";
 import type { forgetPassDataTypes } from "../../../../types/types";
-import { useContext } from "react";
-import { AuthContext } from "../../../../Contexts/AuthContext/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance, USERS_URLS } from "../../../../util/axios";
 import { toast } from "react-toastify";
@@ -11,7 +7,6 @@ import { REQUIRED_VALIDATION } from "../../../../util/validations";
 import loading from "../../../../assets/Images/loading.gif";
 
 const ForgetPassword = () => {
-  const { getLoginData } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const {

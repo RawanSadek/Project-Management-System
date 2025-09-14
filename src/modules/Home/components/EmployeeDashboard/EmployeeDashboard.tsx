@@ -80,11 +80,10 @@ export default function EmployeeDashboard({ tasks }: EmployeeDashboardProps) {
             ))}
           </Pie>
 
-          {/* Legend */}
         <Legend
           verticalAlign="bottom"
           align="center"         
-          iconType="square"       // 'circle', 'square', 'line', etc.
+          iconType="square"  
           formatter={(value) => (
             <span style={{ color: "black", fontWeight: 500, marginRight: '25px' }}>
               {value}
