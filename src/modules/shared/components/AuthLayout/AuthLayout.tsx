@@ -8,8 +8,8 @@ const AuthLayout = () => {
     <>
       <div className="authContainer relative">
         <div className="h-full min-h-screen">
-          <div className="flex min-h-[100%] justify-center items-center ">
-            <div className={`${isRegister ? "md:w-[60%]" : "md:w-[40%]"} `}>
+          <div className="flex min-h-screen justify-center items-center !py-5">
+            <div className={`${isRegister ? "md:w-[60%]" : "md:w-[40%]"} min-h-full`}>
               <div className="logo flex justify-center">
                 <img src={logo} alt="logo" className={`w-70`} />
               </div>
