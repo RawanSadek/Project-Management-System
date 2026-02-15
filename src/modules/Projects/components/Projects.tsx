@@ -1,5 +1,373 @@
+import { FiEdit2, FiEye, FiPlus, FiTrash2 } from "react-icons/fi";
+import { GoSearch } from "react-icons/go";
+import { RiExpandUpDownLine } from "react-icons/ri";
+import dataLoading from "../../../assets/Images/dataLoading.gif";
+
+import { useContext, useEffect, useMemo, useState } from "react";
+import type { ProjectTypes } from "../../../types/types";
+
+import { HiDotsVertical } from "react-icons/hi";
+import { axiosInstance, PROJECTS_URLS } from "../../../util/axios";
+import { Link } from "react-router-dom";
+import { TfiAngleLeft, TfiAngleRight } from "react-icons/tfi";
+import { IoIosArrowDown } from "react-icons/io";
+import noData from "../../../assets/Images/no-data.jpg";
+import DeleteConfirmation from "../../shared/components/DeleteConfirmation/DeleteConfirmation";
+import { toast } from "react-toastify";
+import type { AxiosError } from "axios";
+import { AuthContext } from "../../../Contexts/AuthContext/AuthContext";
+
 const Projects = () => {
-  return <div>Projects</div>;
+  const [projects, setProjects] = useState<ProjectTypes[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const [titleValue, setTitleValue] = useState("");
+
+  const [actionsOpen, setActionsOpen] = useState(false);
+  const [rowIdx, setRowIdx] = useState<number>();
+  const [pageSize, setPageSize] = useState(5);
+  const [page, setPage] = useState(1);
+  const [totalNumberOfPages, setTotalNumberOfPages] = useState(1);
+  const [totalNumberOfRecords, setTotalNumberOfRecords] = useState(1);
+  const totalPages = totalNumberOfPages;
+  const pageSizes = [5, 8, 10, 12, 20];
+
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [targetId, setTargetId] = useState<number | null>(null);
+  const [targetName, setTargetName] = useState<string>("");
+  const { loginData } = useContext(AuthContext);
+  const openDeleteProject = (id: number, name: string) => {
+    setTargetId(id);
+    setTargetName(name);
+    setIsDeleteOpen(true);
+  };
+  const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitleValue(e.target.value);
+    setPage(1);
+  };
+  const canManage = useMemo(
+    () => loginData?.userGroup === "Manager",
+    [loginData?.userGroup]
+  );
+  const getProjects = async () => {
+    try {
+      setLoading(true);
+      const endpoint = canManage
+        ? PROJECTS_URLS.GET_ALL_PROJECTS
+        : PROJECTS_URLS.GET_EMPLOYEE_PROJECTS;
+
+      const params = {
+        pageSize,
+        pageNumber: page,
+        title: titleValue.trim() || undefined,
+      };
+
+      const { data } = await axiosInstance.get(endpoint, { params });
+
+      const list: ProjectTypes[] = data?.data ?? [];
+      setProjects(list);
+      setProjects(data.data);
+      setTotalNumberOfPages(data.totalNumberOfPages);
+      setTotalNumberOfRecords(data.totalNumberOfRecords);
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+  const handleConfirmDelete = async () => {
+    if (targetId == null) return;
+    try {
+      await axiosInstance.delete(PROJECTS_URLS.DELETE_PROJECTS(targetId));
+      toast.success("Project deleted successfully");
+      setProjects((prev) => prev.filter((p) => p.id !== targetId));
+      getProjects();
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
+      toast.error(error?.response?.data?.message || "Try Again");
+    } finally {
+      setIsDeleteOpen(false);
+      setTargetId(null);
+      setTargetName("");
+    }
+  };
+  useEffect(() => {
+    getProjects();
+  }, [pageSize, page, titleValue, canManage]);
+  return (
+    <>
+      <div className="bg-white !py-5 !px-8 text-3xl flex justify-between ">
+        <h2>Projects</h2>
+        {canManage && (
+          <Link
+            to="/dashboard/project-data"
+            className="inline-flex items-center gap-2.5 rounded-full bg-amber-500  !px-5 !py-3
+               text-white text-base font-medium shadow-md hover:bg-amber-600
+               focus:outline-none focus:ring-2 focus:ring-amber-300 active:translate-y-px cursor-pointer"
+          >
+            <FiPlus />
+            Add New Project
+          </Link>
+        )}
+      </div>
+      <div className="bg-white !my-5 !mx-8 text-3xl rounded-lg">
+        {/* Search Container */}
+        <div className="!p-4">
+          <div className="flex justify-start items-center gap-2 border border-gray-400 lg:w-[20%] rounded-full !px-3 !py-1">
+            <GoSearch className="text-lg text-gray-700" />
+            <input
+              id="price"
+              type="text"
+              name="price"
+              value={titleValue}
+              onChange={onTitleChange}
+              placeholder="Search By Title"
+              className="min-w-0 grow py-1.5 pr-3 pl-1 text-base placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+            />
+          </div>
+        </div>
+        {/* table */}
+        <div className="!px-5 lg:!px-0">
+          <table className="w-full">
+            <thead className="bg-[#315951E5]">
+              <tr className="text-sm text-white">
+                <th className="font-light !p-4 border-e border-black">
+                  <div className="flex items-center">
+                    Title <RiExpandUpDownLine className="!ms-2 text-lg" />
+                  </div>
+                </th>
+
+                <th className="font-light !p-4 border-e border-black">
+                  <div className="flex items-center">
+                    Statues <RiExpandUpDownLine className="!ms-2 text-lg" />
+                  </div>
+                </th>
+
+                <th className="font-light !p-4 border-e border-black">
+                  <div className="flex items-center">
+                    Description <RiExpandUpDownLine className="!ms-2 text-lg" />
+                  </div>
+                </th>
+
+                <th className="font-light !p-4 border-e  border-black">
+                  <div className="flex items-center">
+                    Creation Date{" "}
+                    <RiExpandUpDownLine className="!ms-2 text-lg" />
+                  </div>
+                </th>
+
+                <th className="font-light !p-4 border-e border-black">
+                  <div className="flex items-center">
+                    Modificatio Date{" "}
+                    <RiExpandUpDownLine className="!ms-2 text-lg" />
+                  </div>
+                </th>
+
+                <th className="font-light !p-4"></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {/* Loading */}
+              {loading && (
+                <tr>
+                  <td colSpan={7} className="!py-10">
+                    <img
+                      src={dataLoading}
+                      alt="loading"
+                      className="w-20 h-20 !mt-3 !mx-auto"
+                    />
+                  </td>
+                </tr>
+              )}
+
+              {/* No Data */}
+              {!loading && projects.length == 0 && (
+                <tr>
+                  <td colSpan={7} className="!py-10 text-center">
+                    <img
+                      src={noData}
+                      className="!mx-auto w-[40%]"
+                      alt="no data"
+                    ></img>
+                    <h3 className="font-bold">No Data Found!</h3>
+                  </td>
+                </tr>
+              )}
+              {!loading && (
+                <>
+                  {projects?.map((project: ProjectTypes) => (
+                    <tr
+                      key={project.id}
+                      className="odd:bg-white even:bg-[#F5F5F5] text-sm"
+                    >
+                      <td data-label="Title:" className="!p-4 table-data">
+                        {project?.title}
+                      </td>
+                      <td data-label="Status:" className="!p-4 table-data ">
+                        {project?.isActivated === true ? (
+                          <div className="rounded-2xl bg-[#009247] w-fit !py-1 !px-3 text-white font-light">
+                            Public
+                          </div>
+                        ) : (
+                          <div className="rounded-2xl bg-[#922E25B2] w-fit !py-1 !px-3 text-white font-light">
+                            Private
+                          </div>
+                        )}
+                      </td>
+                      <td data-label="Description:" className="!p-4 table-data">
+                        {project?.description}
+                      </td>
+                      <td
+                        data-label="Creation Date:"
+                        className="!p-4 table-data"
+                      >
+                        {new Date(project?.creationDate).toLocaleDateString(
+                          "en-GB"
+                        )}
+                      </td>
+                      <td
+                        data-label="Modification Date:"
+                        className="!p-4 table-data"
+                      >
+                        {new Date(project?.modificationDate).toLocaleDateString(
+                          "en-GB"
+                        )}
+                      </td>
+
+                      <td className="!p-4 table-data relative">
+                        <td className="!p-4 table-data relative">
+                          {canManage && (
+                            <>
+                              <HiDotsVertical
+                                onClick={() => {
+                                  setActionsOpen(!actionsOpen);
+                                  setRowIdx(project.id);
+                                }}
+                                className="text-xl cursor-pointer"
+                              />
+
+                              {actionsOpen && rowIdx === project.id && (
+                                <div className="absolute right-12 top-[70%] w-48 origin-top-right bg-white !py-3 shadow-lg border-1 border-gray-100 ring-opacity-5 z-10 rounded-2xl">
+                                  <div className="w-full flex items-center gap-2 !px-2 !py-0.5 text-sm hover:bg-[#F8F9FB] cursor-pointer">
+                                    <button className="flex w-full items-center gap-2 rounded-lg !px-2 !py-2 hover:bg-slate-100">
+                                      <FiEye className="text-emerald-600" />
+                                      <Link
+                                        to={`/dashboard/project-data/${project.id}?mode=view`}
+                                      >
+                                        View
+                                      </Link>
+                                    </button>
+                                  </div>
+                                  <div className="w-full flex items-center gap-2 !px-2 !py-0.5 text-sm hover:bg-[#F8F9FB] cursor-pointer">
+                                    <button className="flex w-full items-center gap-2 rounded-lg !px-2 !py-2 hover:bg-slate-50">
+                                      <FiEdit2 className="text-emerald-600" />
+                                      <Link
+                                        to={`/dashboard/project-data/${project.id}?mode=edit`}
+                                      >
+                                        Edit
+                                      </Link>
+                                    </button>
+                                  </div>
+                                  <div className="w-full flex items-center gap-2 !px-2 !py-0.5 text-sm hover:bg-[#F8F9FB] cursor-pointer">
+                                    <button className="flex w-full items-center gap-2 rounded-lg !px-2 !py-2 hover:bg-slate-50">
+                                      <FiTrash2 className="text-emerald-600" />
+                                      <span
+                                        onClick={() =>
+                                          openDeleteProject(
+                                            project.id,
+                                            project.title
+                                          )
+                                        }
+                                      >
+                                        Delete
+                                      </span>
+                                    </button>
+                                  </div>
+                                </div>
+                              )}
+                            </>
+                          )}
+                        </td>
+                      </td>
+                    </tr>
+                  ))}
+                  <DeleteConfirmation
+                    isOpen={isDeleteOpen}
+                    onClose={() => setIsDeleteOpen(false)}
+                    onDelete={handleConfirmDelete}
+                    entity="project"
+                    name={targetName}
+                  />
+                </>
+              )}
+            </tbody>
+            <tfoot className="border-t border-gray-200 ">
+              <tr className="text-right">
+                <td colSpan={7} className="!pt-5 !pb-2 !px-5">
+                  {/** Pagination Controls */}
+                  <div className="flex justify-end items-center mt-4 text-gray-600 text-[10px] md:text-sm">
+                    <div className="flex items-center gap-2">
+                      <span>Showing</span>
+                      <div className="relative">
+                        <select
+                          value={pageSize}
+                          onChange={(e) => {
+                            setPageSize(Number(e.target.value));
+                            setPage(1);
+                          }}
+                          className="appearance-none !px-4 !py-1 rounded-full border border-gray-300 focus:outline-none bg-white text-gray-700 font-semibold"
+                          style={{ minWidth: 60 }}
+                        >
+                          {pageSizes.map((size) => (
+                            <option key={size} value={size}>
+                              {size}
+                            </option>
+                          ))}
+                        </select>
+                        <span className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                          <IoIosArrowDown className="text-[10px] md:text-sm" />
+                        </span>
+                      </div>
+                      <span>
+                        of{" "}
+                        <span className="font-semibold !mx-1">
+                          {totalNumberOfRecords}
+                        </span>{" "}
+                        Results
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-4 !ms-6">
+                      <span>
+                        Page <span className="font-semibold !mx-1">{page}</span>{" "}
+                        of{" "}
+                        <span className="font-semibold !mx-1">
+                          {totalPages}
+                        </span>
+                      </span>
+                      <button
+                        className="rounded-full px-2 py-1 text-xl text-gray-400 hover:text-gray-700 disabled:opacity-50"
+                        onClick={() => setPage(page - 1)}
+                        disabled={page === 1}
+                      >
+                        <TfiAngleLeft className="cursor-pointer text-[10px] md:text-sm" />
+                      </button>
+                      <button
+                        className="rounded-full px-2 py-1 text-xl text-gray-400 hover:text-gray-700 disabled:opacity-50"
+                        onClick={() => setPage(page + 1)}
+                        disabled={page === totalPages}
+                      >
+                        <TfiAngleRight className="cursor-pointer text-[10px] md:text-sm" />
+                      </button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default Projects;
